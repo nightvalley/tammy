@@ -1,3 +1,4 @@
+// TODO: добавить выборку по файловым типам с помощью filepath.Ext
 package main
 
 import (
@@ -7,12 +8,15 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
 var StartTime time.Time
 
 func main() {
+	forms := []string{"table", "tree"}
+	formFlag := flag.String("f", forms[0], "Available forms: "+strings.Join(forms, ", "))
 	pathFlag := flag.String("p", ".", "path")
 	flag.Parse()
 
@@ -31,8 +35,13 @@ func main() {
 
 	// fmt.Println(expandedPath)
 
-	files := files.Files{}
-	files.FoundAllFilesInDir(expandedPath)
+	f := files.Files{}
+	switch *formFlag {
+	case "table":
+		f.TableOutput(expandedPath)
+	case "tree":
+		f.TreeOutput(expandedPath)
+	}
 }
 
 func ExpandPath(path string) (string, error) {

@@ -9,17 +9,15 @@ import (
 )
 
 type Files struct {
-	Name      []string
-	FileTypes string
-	Lines     int
-	mu        sync.Mutex
+	Name       []string
+	TotalLines int
+	Lines      []int
+	mu         sync.Mutex
 }
 
 var wg sync.WaitGroup
 
 func (f *Files) FoundAllFilesInDir(path string) {
-	// startTime := time.Now()
-
 	files, err := os.ReadDir(path)
 	if err != nil {
 		log.Fatalf("Error reading files: %s", err)
@@ -48,19 +46,6 @@ func (f *Files) FoundAllFilesInDir(path string) {
 	}
 
 	wg.Wait()
-
-	// fmt.Println(f.Name)
-
-	// for _, name := range f.Name {
-	// 	fmt.Println("name: ", name)
-	// }
-	// for _, ft := range f.FileTypes {
-	// 	fmt.Println("filetypes: ", ft)
-	// }
-	// fmt.Println("line: ", f.Lines)
-
-	// elapsedTime := time.Since(startTime)
-	// log.Printf("Время выполнения: %s", elapsedTime)
 }
 
 func (f *Files) processDirectory(directory string) {
@@ -86,12 +71,13 @@ func (f *Files) processFile(filepath string) {
 	if err != nil {
 		log.Fatalf("Error opening file: %s", err)
 	}
-
 	defer fileBytes.Close()
+
+	lineCount := lineCounter(fileBytes)
 
 	f.mu.Lock()
 	f.Name = append(f.Name, filepath)
-	f.Lines += lineCounter(fileBytes)
+	f.Lines = append(f.Lines, lineCount)
 	f.mu.Unlock()
 }
 
