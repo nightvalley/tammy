@@ -1,4 +1,5 @@
 // TODO: добавить выборку по файловым типам с помощью filepath.Ext
+// BUG: находит не все файлы
 package main
 
 import (

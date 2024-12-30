@@ -3,83 +3,54 @@ package files
 import (
 	"bytes"
 	"io"
+	"io/fs"
 	"log"
 	"os"
-	"sync"
+	"path/filepath"
 )
 
 type Files struct {
 	Name       []string
 	TotalLines int
 	Lines      []int
-	mu         sync.Mutex
 }
-
-var wg sync.WaitGroup
 
 func (f *Files) FoundAllFilesInDir(path string) {
-	files, err := os.ReadDir(path)
-	if err != nil {
-		log.Fatalf("Error reading files: %s", err)
-	}
-
-	for _, file := range files {
-		if !file.IsDir() {
-			wg.Add(1)
-
-			go func(fileName string) {
-				defer wg.Done()
-
-				f.processFile(path + "/" + fileName)
-			}(file.Name())
-		} else if file.IsDir() {
-			if file.Name() != ".git" {
-				wg.Add(1)
-
-				go func(fileName string) {
-					defer wg.Done()
-
-					f.processDirectory(path + "/" + fileName)
-				}(file.Name())
+	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			if d.Name() == ".git" {
+				return fs.SkipDir
 			}
+			return nil
 		}
-	}
 
-	wg.Wait()
-}
+		lineCount, err := f.processFile(path)
+		if err != nil {
+			return err
+		}
 
-func (f *Files) processDirectory(directory string) {
-	files, err := os.ReadDir(directory)
+		f.Name = append(f.Name, path)
+		f.Lines = append(f.Lines, lineCount)
+		f.TotalLines += lineCount
+
+		return nil
+	})
 	if err != nil {
-		log.Fatalf("Error reading subdirectory: %s", err)
-	}
-
-	for _, file := range files {
-		if !file.IsDir() {
-			wg.Add(1)
-			go func(fileName string) {
-				defer wg.Done()
-
-				f.processFile(fileName)
-			}(directory + "/" + file.Name())
-		}
+		log.Fatalf("Error walking the path: %s", err)
 	}
 }
 
-func (f *Files) processFile(filepath string) {
-	fileBytes, err := os.OpenFile(filepath, os.O_RDONLY, os.ModePerm)
+func (f *Files) processFile(filepath string) (int, error) {
+	fileBytes, err := os.Open(filepath)
 	if err != nil {
-		log.Fatalf("Error opening file: %s", err)
+		return 0, err
 	}
 	defer fileBytes.Close()
 
-	lineCount := lineCounter(fileBytes)
-
-	f.mu.Lock()
-	f.Name = append(f.Name, filepath)
-	f.Lines = append(f.Lines, lineCount)
-	f.TotalLines += lineCount
-	f.mu.Unlock()
+	return lineCounter(fileBytes), nil
 }
 
 func lineCounter(r io.Reader) int {
@@ -91,11 +62,10 @@ func lineCounter(r io.Reader) int {
 		c, err := r.Read(buf)
 		count += bytes.Count(buf[:c], lineSep)
 
-		switch {
-		case err == io.EOF:
+		if err == io.EOF {
 			return count
-
-		case err != nil:
+		}
+		if err != nil {
 			return count
 		}
 	}
