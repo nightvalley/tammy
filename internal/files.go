@@ -78,6 +78,7 @@ func (f *Files) processFile(filepath string) {
 	f.mu.Lock()
 	f.Name = append(f.Name, filepath)
 	f.Lines = append(f.Lines, lineCount)
+	f.TotalLines += lineCount
 	f.mu.Unlock()
 }
 
