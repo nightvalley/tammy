@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -28,12 +27,12 @@ func (f *Files) FoundAllFilesInDir(path string) {
 
 			defer fileBytes.Close()
 			f.Name = append(f.Name, file.Name())
-			f.lineCounter(fileBytes, file.Name())
+			f.Lines += lineCounter(fileBytes)
 		}
 	}
 }
 
-func (f *Files) lineCounter(r io.Reader, fileName string) {
+func lineCounter(r io.Reader) int {
 	buf := make([]byte, 32*1024)
 	count := 0
 	lineSep := []byte{'\n'}
@@ -44,12 +43,10 @@ func (f *Files) lineCounter(r io.Reader, fileName string) {
 
 		switch {
 		case err == io.EOF:
-			fmt.Printf("%s: %d lines\n", fileName, count)
-			return
+			return count
 
 		case err != nil:
-			fmt.Printf("%s: %d lines\n", fileName, count)
-			return
+			return count
 		}
 	}
 }
