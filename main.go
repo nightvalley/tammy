@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"os"
 )
@@ -15,10 +17,38 @@ func (f *Files) FoundAllFilesInDir(path string) {
 	if err != nil {
 		log.Fatalf("Error reading files: %s", err)
 	}
+
 	for _, file := range files {
 		if !file.IsDir() {
-			// fmt.Println("if ", file)
-			fmt.Println("else ", file)
+			fileBytes, err := os.OpenFile(path+"/"+file.Name(), os.O_RDONLY, os.ModePerm)
+			if err != nil {
+				log.Fatalf("Error opening file: %s", err)
+			}
+
+			defer fileBytes.Close()
+			f.Name = append(f.Name, file.Name())
+			f.lineCounter(fileBytes)
+		}
+	}
+}
+
+func (f *Files) lineCounter(r io.Reader) {
+	buf := make([]byte, 32*1024)
+	count := 0
+	lineSep := []byte{'\n'}
+
+	for {
+		c, err := r.Read(buf)
+		count += bytes.Count(buf[:c], lineSep)
+
+		switch {
+		case err == io.EOF:
+			fmt.Printf("%s: %d lines\n", f.Name, count)
+			return
+
+		case err != nil:
+			fmt.Printf("%s: %d lines\n", f.Name, count)
+			return
 		}
 	}
 }
