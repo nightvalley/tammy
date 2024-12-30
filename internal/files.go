@@ -5,14 +5,18 @@ import (
 	"io"
 	"log"
 	"os"
+	"sync"
 )
 
 type Files struct {
-	Name  []string
-	Lines int
+	FileTypes string
+	Name      []string
+	Lines     int
 }
 
 func (f *Files) FoundAllFilesInDir(path string) {
+	var wg sync.WaitGroup
+
 	files, err := os.ReadDir(path)
 	if err != nil {
 		log.Fatalf("Error reading files: %s", err)
@@ -20,16 +24,51 @@ func (f *Files) FoundAllFilesInDir(path string) {
 
 	for _, file := range files {
 		if !file.IsDir() {
-			fileBytes, err := os.OpenFile(path+"/"+file.Name(), os.O_RDONLY, os.ModePerm)
-			if err != nil {
-				log.Fatalf("Error opening file: %s", err)
-			}
+			wg.Add(1)
 
-			defer fileBytes.Close()
-			f.Name = append(f.Name, file.Name())
-			f.Lines += lineCounter(fileBytes)
+			go func() {
+				defer wg.Done()
+
+				f.processFile(path + "/" + file.Name())
+			}()
+		} else if file.IsDir() {
+			if file.Name() != ".git" {
+				wg.Add(1)
+
+				go func() {
+					defer wg.Done()
+
+					f.processDirectory(path + "/" + file.Name())
+				}()
+			}
 		}
 	}
+
+	wg.Wait()
+}
+
+func (f *Files) processDirectory(directory string) {
+	files, err := os.ReadDir(directory)
+	if err != nil {
+		log.Fatalf("Error reading subdirectory: %s", err)
+	}
+
+	for _, file := range files {
+		if !file.IsDir() {
+			f.processFile(directory + "/" + file.Name())
+		}
+	}
+}
+
+func (f *Files) processFile(filepath string) {
+	fileBytes, err := os.OpenFile(filepath, os.O_RDONLY, os.ModePerm)
+	if err != nil {
+		log.Fatalf("Error opening file: %s", err)
+	}
+
+	defer fileBytes.Close()
+	f.Name = append(f.Name, filepath)
+	f.Lines += lineCounter(fileBytes)
 }
 
 func lineCounter(r io.Reader) int {
