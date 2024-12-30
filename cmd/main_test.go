@@ -1,11 +1,13 @@
-package main
+package main_test
 
-import "testing"
+import (
+	main "CountLines/cmd"
+	"testing"
+)
 
 func Test_expandPath(t *testing.T) {
 	tests := []struct {
-		name string // description of this test case
-		// Named input parameters for target function.
+		name    string
 		path    string
 		want    string
 		wantErr bool
@@ -18,39 +20,39 @@ func Test_expandPath(t *testing.T) {
 		},
 		{
 			name:    "current directory",
-			path:    "",
-			want:    "/home/username/Development/Golang/Pet-Projects/Cli/CountLines",
+			path:    ".",
+			want:    "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd",
 			wantErr: false,
 		},
 		{
 			name:    "absolute path",
-			path:    "/home/username/Development/Golang/Pet-Projects/Cli/CountLines",
+			path:    "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/",
 			want:    "/home/username/Development/Golang/Pet-Projects/Cli/CountLines",
 			wantErr: false,
 		},
 		{
 			name:    "relative path",
-			path:    "internal",
-			want:    "/home/username/Development/Golang/Pet-Projects/Cli/CountLines",
+			path:    "testfiles",
+			want:    "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles",
 			wantErr: false,
+		},
+		{
+			name:    "non exist path",
+			path:    "internal",
+			want:    "",
+			wantErr: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := expandPath(tt.path)
-			if gotErr != nil {
-				if !tt.wantErr {
-					t.Errorf("expandPath() failed: %v", gotErr)
-				}
+			got, gotErr := main.ExpandPath(tt.path)
+			if (gotErr != nil) != tt.wantErr {
+				t.Errorf("\nReturned error = %v", gotErr)
 				return
 			}
-			if tt.wantErr {
-				t.Fatal("expandPath() succeeded unexpectedly")
-			}
-			// TODO: update the condition below to compare got with tt.want.
-			if true {
-				t.Errorf("expandPath() = %v, want %v", got, tt.want)
+			if got != tt.want {
+				t.Errorf("\nReturned path: %v\nWant: %v", got, tt.want)
 			}
 		})
 	}
