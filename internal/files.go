@@ -9,13 +9,16 @@ import (
 )
 
 type Files struct {
-	FileTypes string
 	Name      []string
+	FileTypes string
 	Lines     int
+	mu        sync.Mutex
 }
 
+var wg sync.WaitGroup
+
 func (f *Files) FoundAllFilesInDir(path string) {
-	var wg sync.WaitGroup
+	// startTime := time.Now()
 
 	files, err := os.ReadDir(path)
 	if err != nil {
@@ -26,20 +29,20 @@ func (f *Files) FoundAllFilesInDir(path string) {
 		if !file.IsDir() {
 			wg.Add(1)
 
-			go func() {
+			go func(fileName string) {
 				defer wg.Done()
 
-				f.processFile(path + "/" + file.Name())
-			}()
+				f.processFile(path + "/" + fileName)
+			}(file.Name())
 		} else if file.IsDir() {
 			if file.Name() != ".git" {
 				wg.Add(1)
 
-				go func() {
+				go func(fileName string) {
 					defer wg.Done()
 
-					f.processDirectory(path + "/" + file.Name())
-				}()
+					f.processDirectory(path + "/" + fileName)
+				}(file.Name())
 			}
 		}
 	}
@@ -49,8 +52,15 @@ func (f *Files) FoundAllFilesInDir(path string) {
 	// fmt.Println(f.Name)
 
 	// for _, name := range f.Name {
-	// 	fmt.Println(name)
+	// 	fmt.Println("name: ", name)
 	// }
+	// for _, ft := range f.FileTypes {
+	// 	fmt.Println("filetypes: ", ft)
+	// }
+	// fmt.Println("line: ", f.Lines)
+
+	// elapsedTime := time.Since(startTime)
+	// log.Printf("Время выполнения: %s", elapsedTime)
 }
 
 func (f *Files) processDirectory(directory string) {
@@ -61,7 +71,12 @@ func (f *Files) processDirectory(directory string) {
 
 	for _, file := range files {
 		if !file.IsDir() {
-			f.processFile(directory + "/" + file.Name())
+			wg.Add(1)
+			go func(fileName string) {
+				defer wg.Done()
+
+				f.processFile(fileName)
+			}(directory + "/" + file.Name())
 		}
 	}
 }
@@ -73,8 +88,11 @@ func (f *Files) processFile(filepath string) {
 	}
 
 	defer fileBytes.Close()
+
+	f.mu.Lock()
 	f.Name = append(f.Name, filepath)
 	f.Lines += lineCounter(fileBytes)
+	f.mu.Unlock()
 }
 
 func lineCounter(r io.Reader) int {

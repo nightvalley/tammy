@@ -7,7 +7,10 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"time"
 )
+
+var StartTime time.Time
 
 func main() {
 	pathFlag := flag.String("p", ".", "path")
@@ -26,7 +29,7 @@ func main() {
 		return
 	}
 
-	fmt.Println(expandedPath)
+	// fmt.Println(expandedPath)
 
 	files := files.Files{}
 	files.FoundAllFilesInDir(expandedPath)
