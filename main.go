@@ -9,7 +9,8 @@ import (
 )
 
 type Files struct {
-	Name []string
+	Name  []string
+	Lines int
 }
 
 func (f *Files) FoundAllFilesInDir(path string) {
@@ -27,12 +28,12 @@ func (f *Files) FoundAllFilesInDir(path string) {
 
 			defer fileBytes.Close()
 			f.Name = append(f.Name, file.Name())
-			f.lineCounter(fileBytes)
+			f.lineCounter(fileBytes, file.Name())
 		}
 	}
 }
 
-func (f *Files) lineCounter(r io.Reader) {
+func (f *Files) lineCounter(r io.Reader, fileName string) {
 	buf := make([]byte, 32*1024)
 	count := 0
 	lineSep := []byte{'\n'}
@@ -43,11 +44,11 @@ func (f *Files) lineCounter(r io.Reader) {
 
 		switch {
 		case err == io.EOF:
-			fmt.Printf("%s: %d lines\n", f.Name, count)
+			fmt.Printf("%s: %d lines\n", fileName, count)
 			return
 
 		case err != nil:
-			fmt.Printf("%s: %d lines\n", f.Name, count)
+			fmt.Printf("%s: %d lines\n", fileName, count)
 			return
 		}
 	}
