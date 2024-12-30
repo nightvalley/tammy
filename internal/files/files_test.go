@@ -16,11 +16,7 @@ func TestFiles_FoundAllFilesInDir(t *testing.T) {
 		{
 			name: "test files",
 			path: "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles",
-			want: []string{
-				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/b.txt",
-				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/a.json",
-				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/pipiska.jopa",
-			},
+			want: []string{},
 		},
 	}
 

@@ -32,6 +32,10 @@ func (f *Files) FoundAllFilesInDir(path string) {
 			return err
 		}
 
+		if lineCount == 0 {
+			return nil
+		}
+
 		f.Name = append(f.Name, path)
 		f.Lines = append(f.Lines, lineCount)
 		f.TotalLines += lineCount
