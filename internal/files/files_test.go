@@ -1,7 +1,7 @@
 package files_test
 
 import (
-	files "CountLines/internal"
+	"CountLines/internal/files"
 	"fmt"
 	"sort"
 	"testing"

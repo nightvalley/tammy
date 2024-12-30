@@ -2,7 +2,8 @@
 package main
 
 import (
-	files "CountLines/internal"
+	"CountLines/internal/files"
+	"CountLines/internal/forms"
 	"flag"
 	"fmt"
 	"os"
@@ -15,8 +16,8 @@ import (
 var StartTime time.Time
 
 func main() {
-	forms := []string{"table", "tree"}
-	formFlag := flag.String("f", forms[0], "Available forms: "+strings.Join(forms, ", "))
+	availableForms := []string{"table", "tree", "total"}
+	formFlag := flag.String("f", availableForms[0], "Available forms: "+strings.Join(availableForms, ", "))
 	pathFlag := flag.String("p", ".", "path")
 	flag.Parse()
 
@@ -37,10 +38,13 @@ func main() {
 
 	f := files.Files{}
 	switch *formFlag {
-	case "table":
-		f.TableOutput(expandedPath)
-	case "tree":
-		f.TreeOutput(expandedPath)
+	case availableForms[0]:
+		forms.TableOutput(expandedPath)
+	case availableForms[1]:
+		forms.ListOutput(expandedPath)
+	case availableForms[2]:
+		f.FoundAllFilesInDir(path)
+		fmt.Println(f.TotalLines)
 	}
 }
 

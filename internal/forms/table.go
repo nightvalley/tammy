@@ -1,6 +1,7 @@
-package files
+package forms
 
 import (
+	"CountLines/internal/files"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,14 +10,16 @@ import (
 	"github.com/charmbracelet/lipgloss/table"
 )
 
-func (f *Files) TableOutput(expandedPath string) {
-	f.FoundAllFilesInDir(expandedPath)
+const (
+	firstColor  = lipgloss.Color("5")
+	secondColor = lipgloss.Color("240")
+	thirdColor  = lipgloss.Color("250")
+)
 
-	const (
-		firstColor  = lipgloss.Color("5")
-		secondColor = lipgloss.Color("240")
-		thirdColor  = lipgloss.Color("250")
-	)
+func TableOutput(expandedPath string) {
+	f := files.Files{}
+
+	f.FoundAllFilesInDir(expandedPath)
 
 	re := lipgloss.NewRenderer(os.Stdout)
 
@@ -68,6 +71,3 @@ func (f *Files) TableOutput(expandedPath string) {
 	fmt.Println("Total lines: ", f.TotalLines)
 }
 
-func (f *Files) TreeOutput(expandedPath string) {
-	f.FoundAllFilesInDir(expandedPath)
-}
