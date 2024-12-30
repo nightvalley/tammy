@@ -2,23 +2,42 @@ package main
 
 import (
 	files "CountLines/internal"
-	"log"
+	"flag"
+	"fmt"
 	"os"
+	"os/user"
+	"path/filepath"
 )
 
 func main() {
-	var path string
+	pathFlag := flag.String("p", ".", "path")
+	flag.Parse()
 
-	if len(os.Args) > 1 && os.Args[1] != "" {
-		path = os.Args[1]
-	} else {
-		var err error
-		path, err = os.Getwd()
-		if err != nil {
-			log.Fatalf("Error getting current dir: %s", err)
-		}
+	path, err := expandPath(*pathFlag)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
 	}
 
 	files := files.Files{}
 	files.FoundAllFilesInDir(path)
+}
+
+func expandPath(path string) (string, error) {
+	if len(path) > 0 && path[0] == '~' {
+		usr, err := user.Current()
+		if err != nil {
+			return "", err
+		}
+
+		return filepath.Join(usr.HomeDir, path[1:]), nil
+	} else {
+		var err error
+		path, err = os.Getwd()
+		if err != nil {
+			return "", err
+		}
+
+		return path, nil
+	}
 }

@@ -45,6 +45,10 @@ func (f *Files) FoundAllFilesInDir(path string) {
 	}
 
 	wg.Wait()
+
+	// for _, name := range f.Name {
+	// 	fmt.Println(name)
+	// }
 }
 
 func (f *Files) processDirectory(directory string) {
