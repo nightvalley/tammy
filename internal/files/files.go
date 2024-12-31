@@ -13,6 +13,8 @@ type Files struct {
 	Name       []string
 	TotalLines int
 	Lines      []int
+
+	Hidden bool
 }
 
 func (f *Files) FoundAllFilesInDir(path string) {
@@ -27,18 +29,33 @@ func (f *Files) FoundAllFilesInDir(path string) {
 			return nil
 		}
 
-		lineCount, err := f.processFile(path)
-		if err != nil {
-			return err
-		}
+		if f.Hidden {
+			lineCount, err := f.processFile(path)
+			if err != nil {
+				return err
+			}
 
-		if lineCount == 0 {
-			return nil
-		}
+			if lineCount == 0 {
+				return nil
+			}
 
-		f.Name = append(f.Name, path)
-		f.Lines = append(f.Lines, lineCount)
-		f.TotalLines += lineCount
+			f.Name = append(f.Name, path)
+			f.Lines = append(f.Lines, lineCount)
+			f.TotalLines += lineCount
+		} else if !f.Hidden && filepath.Base(path)[0] != '.' {
+			lineCount, err := f.processFile(path)
+			if err != nil {
+				return err
+			}
+
+			if lineCount == 0 {
+				return nil
+			}
+
+			f.Name = append(f.Name, path)
+			f.Lines = append(f.Lines, lineCount)
+			f.TotalLines += lineCount
+		}
 
 		return nil
 	})
