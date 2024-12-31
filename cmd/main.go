@@ -20,6 +20,7 @@ func main() {
 		pathFlag   = flag.String("p", ".", "path")
 		timeFlag   = flag.Bool("t", false, "time")
 		showHidden = flag.Bool("h", false, "show hidden files")
+		filetype   = flag.String("ft", "", "filetype")
 	)
 	flag.Parse()
 
@@ -38,38 +39,31 @@ func main() {
 
 	f := files.Files{}
 
-	switch *showHidden {
-	case true:
-		f.Hidden = true
-	case false:
-		f.Hidden = false
-	}
-
 	if !*timeFlag {
 		switch *formFlag {
 		case availableForms[0]:
-			forms.TableOutput(expandedPath)
+			forms.TableOutput(expandedPath, *showHidden, *filetype)
 		case availableForms[1]:
-			forms.ListOutput(expandedPath)
+			forms.ListOutput(expandedPath, *showHidden, *filetype)
 		case availableForms[2]:
-			f.FoundAllFilesInDir(path)
+			f.FoundAllFilesInDir(expandedPath, *showHidden, *filetype)
 			fmt.Println(f.TotalLines)
 		}
 	} else {
 		switch *formFlag {
 		case availableForms[0]:
 			t := time.Now()
-			forms.TableOutput(expandedPath)
+			forms.TableOutput(expandedPath, *showHidden, *filetype)
 			duration := time.Since(t)
 			fmt.Printf("\nExecution time: %v\n", duration)
 		case availableForms[1]:
 			t := time.Now()
-			forms.ListOutput(expandedPath)
+			forms.ListOutput(expandedPath, *showHidden, *filetype)
 			duration := time.Since(t)
 			fmt.Printf("\nExecution time: %v\n", duration)
 		case availableForms[2]:
 			t := time.Now()
-			f.FoundAllFilesInDir(path)
+			f.FoundAllFilesInDir(path, *showHidden, *filetype)
 			fmt.Println(f.TotalLines)
 			duration := time.Since(t)
 			fmt.Printf("\nExecution time: %v\n", duration)

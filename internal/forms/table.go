@@ -16,10 +16,10 @@ const (
 	thirdColor  = lipgloss.Color("250")
 )
 
-func TableOutput(expandedPath string) {
+func TableOutput(expandedPath string, hidden bool, filetype string) {
 	f := files.Files{}
 
-	f.FoundAllFilesInDir(expandedPath)
+	f.FoundAllFilesInDir(expandedPath, hidden, filetype)
 
 	re := lipgloss.NewRenderer(os.Stdout)
 
@@ -70,4 +70,3 @@ func TableOutput(expandedPath string) {
 	fmt.Println(t)
 	fmt.Println("Total lines: ", f.TotalLines)
 }
-

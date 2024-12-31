@@ -13,11 +13,9 @@ type Files struct {
 	Name       []string
 	TotalLines int
 	Lines      []int
-
-	Hidden bool
 }
 
-func (f *Files) FoundAllFilesInDir(path string) {
+func (f *Files) FoundAllFilesInDir(path string, hidden bool, filetype string) {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -29,38 +27,25 @@ func (f *Files) FoundAllFilesInDir(path string) {
 			return nil
 		}
 
-		if f.Hidden {
-			lineCount, err := f.processFile(path)
-			if err != nil {
-				return err
-			}
-
-			if lineCount == 0 {
-				return nil
-			}
-
-			f.Name = append(f.Name, path)
-			f.Lines = append(f.Lines, lineCount)
-			f.TotalLines += lineCount
-		} else if !f.Hidden && filepath.Base(path)[0] != '.' {
-			lineCount, err := f.processFile(path)
-			if err != nil {
-				return err
-			}
-
-			if lineCount == 0 {
-				return nil
-			}
-
-			f.Name = append(f.Name, path)
-			f.Lines = append(f.Lines, lineCount)
-			f.TotalLines += lineCount
+		if filetype != "" && filetype == filepath.Ext(path) {
 		}
 
+		if hidden || (!hidden && filepath.Base(path)[0] != '.') {
+			lineCount, err := f.processFile(path)
+			if err != nil {
+				return err
+			}
+
+			if lineCount > 0 {
+				f.Name = append(f.Name, path)
+				f.Lines = append(f.Lines, lineCount)
+				f.TotalLines += lineCount
+			}
+		}
 		return nil
 	})
 	if err != nil {
-		log.Fatalf("Error walking the path: %s", err)
+		log.Fatalf("Error: %s", err)
 	}
 }
 
@@ -90,4 +75,18 @@ func lineCounter(r io.Reader) int {
 			return count
 		}
 	}
+}
+
+func sortByFT(filetype string, path string) string {
+	if filetype == filepath.Ext(path) {
+		return path
+	}
+	return path
+}
+
+func sortHidden(path string) string {
+	if filepath.Base(path)[0] != '.' {
+		return path
+	}
+	return path
 }

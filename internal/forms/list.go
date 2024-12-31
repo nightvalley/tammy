@@ -8,9 +8,9 @@ import (
 	"github.com/charmbracelet/lipgloss/list"
 )
 
-func ListOutput(expandedPath string) {
+func ListOutput(expandedPath string, hidden bool, filetype string) {
 	f := files.Files{}
-	f.FoundAllFilesInDir(expandedPath)
+	f.FoundAllFilesInDir(expandedPath, hidden, filetype)
 
 	l := list.New()
 	for i, name := range f.Name {
