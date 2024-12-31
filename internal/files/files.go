@@ -13,7 +13,12 @@ type Files struct {
 	Name       []string
 	TotalLines int
 	Lines      []int
-	Size       []int
+	Size       []FileSize
+}
+
+type FileSize struct {
+	Size float64
+	Unit string
 }
 
 type Flags struct {
@@ -48,7 +53,8 @@ func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 		}
 
 		if lineCount > 0 {
-			files.Size = append(files.Size, int(fileSize(path)))
+			size := fileSize(path)
+			files.Size = append(files.Size, size)
 			files.Name = append(files.Name, path)
 			files.Lines = append(files.Lines, lineCount)
 			files.TotalLines += lineCount
@@ -88,10 +94,25 @@ func lineCounter(r io.Reader) int {
 	}
 }
 
-func fileSize(path string) int64 {
+func fileSize(path string) FileSize {
 	fileInfo, err := os.Stat(path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return fileInfo.Size()
+
+	sizeInBytes := fileInfo.Size()
+	var size FileSize
+
+	switch {
+	case sizeInBytes < 1024:
+		size = FileSize{Size: float64(sizeInBytes), Unit: "b"}
+	case sizeInBytes < 1024*1024:
+		size = FileSize{Size: float64(sizeInBytes) / 1024, Unit: "KB"}
+	case sizeInBytes < 1024*1024*1024:
+		size = FileSize{Size: float64(sizeInBytes) / (1024 * 1024), Unit: "MB"}
+	default:
+		size = FileSize{Size: float64(sizeInBytes) / (1024 * 1024 * 1024), Unit: "GB"}
+	}
+
+	return size
 }
