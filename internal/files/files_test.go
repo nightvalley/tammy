@@ -39,7 +39,7 @@ func TestFiles_FoundAllFilesInDir(t *testing.T) {
 		{
 			name:     "with file type",
 			hidden:   false,
-			filetype: "json",
+			filetype: ".json",
 			path:     "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles",
 			want: []string{
 				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/a.json",

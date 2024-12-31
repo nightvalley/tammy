@@ -20,6 +20,7 @@ func (f *Files) FoundAllFilesInDir(path string, hidden bool, filetype string) {
 		if err != nil {
 			return err
 		}
+
 		if d.IsDir() {
 			if d.Name() == ".git" {
 				return fs.SkipDir
@@ -27,20 +28,22 @@ func (f *Files) FoundAllFilesInDir(path string, hidden bool, filetype string) {
 			return nil
 		}
 
-		if filetype != "" && filetype == filepath.Ext(path) {
+		if filetype != "" && filetype != filepath.Ext(path) {
+			return nil
+		}
+		if !hidden && filepath.Base(path)[0] == '.' {
+			return nil
 		}
 
-		if hidden || (!hidden && filepath.Base(path)[0] != '.') {
-			lineCount, err := f.processFile(path)
-			if err != nil {
-				return err
-			}
+		lineCount, err := f.processFile(path)
+		if err != nil {
+			return err
+		}
 
-			if lineCount > 0 {
-				f.Name = append(f.Name, path)
-				f.Lines = append(f.Lines, lineCount)
-				f.TotalLines += lineCount
-			}
+		if lineCount > 0 {
+			f.Name = append(f.Name, path)
+			f.Lines = append(f.Lines, lineCount)
+			f.TotalLines += lineCount
 		}
 		return nil
 	})
@@ -75,18 +78,4 @@ func lineCounter(r io.Reader) int {
 			return count
 		}
 	}
-}
-
-func sortByFT(filetype string, path string) string {
-	if filetype == filepath.Ext(path) {
-		return path
-	}
-	return path
-}
-
-func sortHidden(path string) string {
-	if filepath.Base(path)[0] != '.' {
-		return path
-	}
-	return path
 }
