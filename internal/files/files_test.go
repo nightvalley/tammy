@@ -50,8 +50,12 @@ func TestFiles_FoundAllFilesInDir(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var f files.Files
+			flags := files.Flags{
+				Hidden:   tt.hidden,
+				FileType: tt.filetype,
+			}
 
-			f.FoundAllFilesInDir(tt.path, tt.hidden, tt.filetype)
+			f.FoundAllFilesInDir(tt.path, flags)
 
 			sort.Strings(f.Name)
 			sort.Strings(tt.want)
