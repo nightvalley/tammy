@@ -38,35 +38,74 @@ func TableOutput(expandedPath string, flags files.Flags) {
 		BorderStyle  = lipgloss.NewStyle().Foreground(firstColor)
 	)
 
-	var rows [][]string
-	for i, name := range f.Name {
-		rows = append(rows, []string{filepath.Base(name), fmt.Sprintf("%d", f.Lines[i])})
+	if !flags.ShowSize {
+		var rows [][]string
+		for i, name := range f.Name {
+			rows = append(rows, []string{filepath.Base(name), fmt.Sprintf("%d", f.Lines[i])})
+		}
+
+		t := table.New().
+			Border(lipgloss.ThickBorder()).
+			BorderStyle(BorderStyle).
+			StyleFunc(func(row, col int) lipgloss.Style {
+				var style lipgloss.Style
+
+				switch {
+				case row == table.HeaderRow:
+					return HeaderStyle
+				case row%2 == 0:
+					style = EvenRowStyle
+				default:
+					style = OddRowStyle
+				}
+
+				if col == 1 {
+					style = style.Width(22)
+				}
+
+				return style
+			}).
+			Headers("File name", "Lines").
+			Rows(rows...)
+
+		fmt.Println(t)
+		fmt.Println("Total lines: ", f.TotalLines)
+	} else {
+		var rows [][]string
+		for i, name := range f.Name {
+			rows = append(rows, []string{
+				filepath.Base(name),
+				fmt.Sprintf("%d", f.Lines[i]),
+				fmt.Sprintf("%d", f.Size[i]),
+			})
+		}
+
+		t := table.New().
+			Border(lipgloss.ThickBorder()).
+			BorderStyle(BorderStyle).
+			StyleFunc(func(row, col int) lipgloss.Style {
+				var style lipgloss.Style
+
+				switch {
+				case row == table.HeaderRow:
+					return HeaderStyle
+				case row%2 == 0:
+					style = EvenRowStyle
+				default:
+					style = OddRowStyle
+				}
+
+				if col == 1 {
+					style = style.Width(22)
+				}
+
+				return style
+			}).
+			Headers("File name", "Lines", "Size").
+			Rows(rows...)
+
+		fmt.Println(t)
+		fmt.Println("Total lines: ", f.TotalLines)
+
 	}
-
-	t := table.New().
-		Border(lipgloss.ThickBorder()).
-		BorderStyle(BorderStyle).
-		StyleFunc(func(row, col int) lipgloss.Style {
-			var style lipgloss.Style
-
-			switch {
-			case row == table.HeaderRow:
-				return HeaderStyle
-			case row%2 == 0:
-				style = EvenRowStyle
-			default:
-				style = OddRowStyle
-			}
-
-			if col == 1 {
-				style = style.Width(22)
-			}
-
-			return style
-		}).
-		Headers("File name", "Lines").
-		Rows(rows...)
-
-	fmt.Println(t)
-	fmt.Println("Total lines: ", f.TotalLines)
 }

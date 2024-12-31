@@ -48,6 +48,7 @@ func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 		}
 
 		if lineCount > 0 {
+			files.Size = append(files.Size, int(fileSize(path)))
 			files.Name = append(files.Name, path)
 			files.Lines = append(files.Lines, lineCount)
 			files.TotalLines += lineCount
@@ -85,4 +86,12 @@ func lineCounter(r io.Reader) int {
 			return count
 		}
 	}
+}
+
+func fileSize(path string) int64 {
+	fileInfo, err := os.Stat(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return fileInfo.Size()
 }
