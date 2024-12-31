@@ -9,20 +9,42 @@ import (
 
 func TestFiles_FoundAllFilesInDir(t *testing.T) {
 	tests := []struct {
-		name string
-		path string
-		want []string
+		name   string
+		path   string
+		want   []string
+		hidden bool
 	}{
 		{
-			name: "test files",
-			path: "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles",
-			want: []string{},
+			name:   "without hidden files",
+			hidden: true,
+			path:   "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles",
+			want: []string{
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/b.txt",
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/a.json",
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/sisya.pisya",
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/.pipiska.pipiska",
+			},
+		},
+		{
+			name:   "with hidden files",
+			hidden: true,
+			path:   "/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles",
+			want: []string{
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/b.txt",
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/a.json",
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/sisya.pisya",
+				"/home/username/Development/Golang/Pet-Projects/Cli/CountLines/cmd/testfiles/with-lines/.pipiska.pipiska",
+			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var f files.Files
+			if tt.hidden {
+				f.Hidden = true
+			}
+
 			f.FoundAllFilesInDir(tt.path)
 
 			sort.Strings(f.Name)
