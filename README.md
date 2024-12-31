@@ -1,3 +1,5 @@
-- [ ] добавить выборку по файловым типам с помощью `filepath.Ext`: игнорирование файловых типов и только по определенному файловому типу
-- [ ] добавить флаг для включения в список скрытых файлов, по умолчанию не включать их
-- [ ] добавить вес файла по дополнительному флагу
+# Installation
+Build binary and copy it to your /usr/bin
+```sh
+  git clone https://github.com/PutaMadre1337/CountLines && cd CountLines && go build -o countlines $(find cmd/main.go) && sudo cp countlines /usr/bin && cd .. && rm -rf CountLines
+```
