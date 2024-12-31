@@ -10,8 +10,8 @@ import (
 )
 
 type Files struct {
-	Name       []string
 	TotalLines int
+	Name       []string
 	Lines      []int
 	Size       []FileSize
 }
@@ -103,15 +103,20 @@ func fileSize(path string) FileSize {
 	sizeInBytes := fileInfo.Size()
 	var size FileSize
 
+	size.Size = float64(sizeInBytes)
+
 	switch {
 	case sizeInBytes < 1024:
-		size = FileSize{Size: float64(sizeInBytes), Unit: "b"}
+		size.Unit = "b"
 	case sizeInBytes < 1024*1024:
-		size = FileSize{Size: float64(sizeInBytes) / 1024, Unit: "KB"}
+		size.Size /= 1024
+		size.Unit = "KB"
 	case sizeInBytes < 1024*1024*1024:
-		size = FileSize{Size: float64(sizeInBytes) / (1024 * 1024), Unit: "MB"}
+		size.Size /= (1024 * 1024)
+		size.Unit = "MB"
 	default:
-		size = FileSize{Size: float64(sizeInBytes) / (1024 * 1024 * 1024), Unit: "GB"}
+		size.Size /= (1024 * 1024 * 1024)
+		size.Unit = "GB"
 	}
 
 	return size
