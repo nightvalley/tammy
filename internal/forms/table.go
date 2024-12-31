@@ -16,10 +16,10 @@ const (
 	thirdColor  = lipgloss.Color("250")
 )
 
-func TableOutput(expandedPath string, hidden bool, filetype string) {
+func TableOutput(expandedPath string, flags files.Flags) {
 	f := files.Files{}
 
-	f.FoundAllFilesInDir(expandedPath, hidden, filetype)
+	f.FoundAllFilesInDir(expandedPath, flags)
 
 	re := lipgloss.NewRenderer(os.Stdout)
 

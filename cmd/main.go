@@ -16,11 +16,12 @@ func main() {
 	availableForms := []string{"table", "list", "total"}
 
 	var (
-		formFlag   = flag.String("f", availableForms[0], "Available forms: "+strings.Join(availableForms, ", "))
-		pathFlag   = flag.String("p", ".", "path")
-		timeFlag   = flag.Bool("t", false, "time")
-		showHidden = flag.Bool("h", false, "show hidden files")
-		filetype   = flag.String("ft", "", "filetype")
+		formFlag       = flag.String("f", availableForms[0], "Available forms: "+strings.Join(availableForms, ", "))
+		pathFlag       = flag.String("p", ".", "path")
+		timeFlag       = flag.Bool("t", false, "time")
+		showHiddenFlag = flag.Bool("h", false, "show hidden files")
+		filetypeFlag   = flag.String("ft", "", "filetype")
+		fileSizeFlag   = flag.Bool("s", false, "size")
 	)
 	flag.Parse()
 
@@ -38,32 +39,37 @@ func main() {
 	}
 
 	f := files.Files{}
+	flags := files.Flags{
+		Hidden:   *showHiddenFlag,
+		FileType: *filetypeFlag,
+		ShowSize: *fileSizeFlag,
+	}
 
 	if !*timeFlag {
 		switch *formFlag {
 		case availableForms[0]:
-			forms.TableOutput(expandedPath, *showHidden, *filetype)
+			forms.TableOutput(expandedPath, flags)
 		case availableForms[1]:
-			forms.ListOutput(expandedPath, *showHidden, *filetype)
+			forms.ListOutput(expandedPath, flags)
 		case availableForms[2]:
-			f.FoundAllFilesInDir(expandedPath, *showHidden, *filetype)
+			f.FoundAllFilesInDir(expandedPath, flags)
 			fmt.Println(f.TotalLines)
 		}
 	} else {
 		switch *formFlag {
 		case availableForms[0]:
 			t := time.Now()
-			forms.TableOutput(expandedPath, *showHidden, *filetype)
+			forms.TableOutput(expandedPath, flags)
 			duration := time.Since(t)
 			fmt.Printf("\nExecution time: %v\n", duration)
 		case availableForms[1]:
 			t := time.Now()
-			forms.ListOutput(expandedPath, *showHidden, *filetype)
+			forms.ListOutput(expandedPath, flags)
 			duration := time.Since(t)
 			fmt.Printf("\nExecution time: %v\n", duration)
 		case availableForms[2]:
 			t := time.Now()
-			f.FoundAllFilesInDir(path, *showHidden, *filetype)
+			f.FoundAllFilesInDir(path, flags)
 			fmt.Println(f.TotalLines)
 			duration := time.Since(t)
 			fmt.Printf("\nExecution time: %v\n", duration)

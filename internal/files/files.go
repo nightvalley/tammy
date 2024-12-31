@@ -13,9 +13,16 @@ type Files struct {
 	Name       []string
 	TotalLines int
 	Lines      []int
+	Size       []int
 }
 
-func (f *Files) FoundAllFilesInDir(path string, hidden bool, filetype string) {
+type Flags struct {
+	ShowSize bool
+	Hidden   bool
+	FileType string
+}
+
+func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -28,22 +35,22 @@ func (f *Files) FoundAllFilesInDir(path string, hidden bool, filetype string) {
 			return nil
 		}
 
-		if filetype != "" && filetype != filepath.Ext(path) {
+		if flags.FileType != "" && flags.FileType != filepath.Ext(path) {
 			return nil
 		}
-		if !hidden && filepath.Base(path)[0] == '.' {
+		if !flags.Hidden && filepath.Base(path)[0] == '.' {
 			return nil
 		}
 
-		lineCount, err := f.processFile(path)
+		lineCount, err := files.processFile(path)
 		if err != nil {
 			return err
 		}
 
 		if lineCount > 0 {
-			f.Name = append(f.Name, path)
-			f.Lines = append(f.Lines, lineCount)
-			f.TotalLines += lineCount
+			files.Name = append(files.Name, path)
+			files.Lines = append(files.Lines, lineCount)
+			files.TotalLines += lineCount
 		}
 		return nil
 	})
