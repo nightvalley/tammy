@@ -26,7 +26,7 @@ func TableOutput(expandedPath string, flags files.Flags) {
 	fileNameLen := 0
 	for _, name := range f.Name {
 		if len(filepath.Base(name)) > fileNameLen {
-			fileNameLen = len(filepath.Base(name))
+			fileNameLen = len(filepath.Base(name)) + 10
 		}
 	}
 
@@ -35,9 +35,9 @@ func TableOutput(expandedPath string, flags files.Flags) {
 		termWidth = 80
 	}
 
-	maxFileNameWidth := min(fileNameLen, termWidth/3)
-	maxLinesWidth := 22
-	maxSizeWidth := 22
+	maxFileNameWidth := min(fileNameLen, termWidth)
+	maxLinesWidth := 10
+	maxSizeWidth := 20
 
 	var (
 		HeaderStyle  = re.NewStyle().Foreground(firstColor).Bold(true).Align(lipgloss.Center)
@@ -51,9 +51,9 @@ func TableOutput(expandedPath string, flags files.Flags) {
 		var rows [][]string
 		for i, name := range f.Name {
 			rows = append(rows, []string{filepath.Base(name), fmt.Sprintf("%d", f.Lines[i])})
-			rows = append(rows, []string{"", ""})
-			rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
 		}
+		rows = append(rows, []string{"", ""})
+		rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
 
 		t := table.New().
 			Border(lipgloss.ThickBorder()).
@@ -91,9 +91,9 @@ func TableOutput(expandedPath string, flags files.Flags) {
 				fmt.Sprintf("%d", f.Lines[i]),
 				fmt.Sprintf("%.2f %s", size.Size, size.Unit),
 			})
-			rows = append(rows, []string{"", ""})
-			rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
 		}
+		rows = append(rows, []string{"", ""})
+		rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
 
 		t := table.New().
 			Border(lipgloss.ThickBorder()).
