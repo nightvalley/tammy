@@ -51,6 +51,8 @@ func TableOutput(expandedPath string, flags files.Flags) {
 		var rows [][]string
 		for i, name := range f.Name {
 			rows = append(rows, []string{filepath.Base(name), fmt.Sprintf("%d", f.Lines[i])})
+			rows = append(rows, []string{"", ""})
+			rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
 		}
 
 		t := table.New().
@@ -80,7 +82,6 @@ func TableOutput(expandedPath string, flags files.Flags) {
 			Rows(rows...)
 
 		fmt.Println(t)
-		fmt.Println("Total lines: ", f.TotalLines)
 	} else {
 		var rows [][]string
 		for i, name := range f.Name {
@@ -90,6 +91,8 @@ func TableOutput(expandedPath string, flags files.Flags) {
 				fmt.Sprintf("%d", f.Lines[i]),
 				fmt.Sprintf("%.2f %s", size.Size, size.Unit),
 			})
+			rows = append(rows, []string{"", ""})
+			rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
 		}
 
 		t := table.New().
@@ -121,7 +124,6 @@ func TableOutput(expandedPath string, flags files.Flags) {
 			Rows(rows...)
 
 		fmt.Println(t)
-		fmt.Println("Total lines: ", f.TotalLines)
 	}
 }
 

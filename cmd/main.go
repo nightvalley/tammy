@@ -18,10 +18,10 @@ func main() {
 	var (
 		formFlag       = flag.String("f", availableForms[0], "Available forms: "+strings.Join(availableForms, ", "))
 		pathFlag       = flag.String("p", ".", "path")
-		timeFlag       = flag.Bool("t", false, "time")
+		timeFlag       = flag.Bool("t", false, "benchmark")
 		showHiddenFlag = flag.Bool("h", false, "show hidden files")
-		filetypeFlag   = flag.String("ft", "", "filetype")
-		fileSizeFlag   = flag.Bool("s", false, "size")
+		filetypeFlag   = flag.String("ft", "", "count files with file type")
+		fileSizeFlag   = flag.Bool("s", false, "count size of files")
 	)
 	flag.Parse()
 
