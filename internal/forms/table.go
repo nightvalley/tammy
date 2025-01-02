@@ -17,13 +17,13 @@ const (
 )
 
 func TableOutput(expandedPath string, flags files.Flags) {
-	f := files.Files{}
-	f.FoundAllFilesInDir(expandedPath, flags)
+	files := files.Files{}
+	files.FoundAllFilesInDir(expandedPath, flags)
 
 	re := lipgloss.NewRenderer(os.Stdout)
 
 	fileNameLen := 0
-	for _, name := range f.Name {
+	for _, name := range files.Name {
 		if len(filepath.Base(name)) > fileNameLen {
 			fileNameLen = len(filepath.Base(name)) + 10
 		}
@@ -37,18 +37,18 @@ func TableOutput(expandedPath string, flags files.Flags) {
 
 	var rows [][]string
 	if flags.ShowSize {
-		for i, name := range f.Name {
-			size := f.Size[i]
-			rows = append(rows, createRow(filepath.Base(name), f.Lines[i], fmt.Sprintf("%.2f %s", size.Size, size.Unit)))
+		for i, name := range files.Name {
+			size := files.Size[i]
+			rows = append(rows, createRow(filepath.Base(name), files.Lines[i], fmt.Sprintf("%.2f %s", size.Size, size.Unit)))
 		}
 	} else {
-		for i, name := range f.Name {
-			rows = append(rows, createRow(filepath.Base(name), f.Lines[i]))
+		for i, name := range files.Name {
+			rows = append(rows, createRow(filepath.Base(name), files.Lines[i]))
 		}
 	}
 
 	rows = append(rows, []string{"", ""})
-	rows = append(rows, createRow("Total lines", f.TotalLines))
+	rows = append(rows, createRow("Total lines", files.TotalLines))
 
 	t := table.New().
 		Border(lipgloss.ThickBorder()).

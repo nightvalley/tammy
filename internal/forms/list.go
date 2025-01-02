@@ -9,14 +9,14 @@ import (
 )
 
 func ListOutput(expandedPath string, flags files.Flags) {
-	f := files.Files{}
-	f.FoundAllFilesInDir(expandedPath, flags)
+	files := files.Files{}
+	files.FoundAllFilesInDir(expandedPath, flags)
 
 	l := list.New()
-	for i, name := range f.Name {
-		addFileInfoToList(l, name, f.Lines[i], f.Size[i], flags.ShowSize)
+	for i, name := range files.Name {
+		addFileInfoToList(l, name, files.Lines[i], files.Size[i], flags.ShowSize)
 	}
-	l.Item("Total lines: " + fmt.Sprintf("%d", f.TotalLines))
+	l.Item("Total lines: " + fmt.Sprintf("%d", files.TotalLines))
 	l.Enumerator(list.Roman)
 
 	fmt.Println(l)

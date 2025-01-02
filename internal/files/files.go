@@ -66,7 +66,7 @@ func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 	}
 }
 
-func (f *Files) processFile(filepath string) (int, error) {
+func (files *Files) processFile(filepath string) (int, error) {
 	fileBytes, err := os.Open(filepath)
 	if err != nil {
 		return 0, err

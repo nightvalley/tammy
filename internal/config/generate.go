@@ -20,4 +20,4 @@ type Config struct {
 	TableBorderColor   int
 }
 
-func generateConfig() {}
+func (config *Config) generateConfig() {}
