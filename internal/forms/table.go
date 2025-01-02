@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
@@ -30,13 +31,15 @@ func TableOutput(expandedPath string, flags files.Flags) {
 		}
 	}
 
+	numberOfLinesLen := len(strconv.Itoa(f.TotalLines)) + 4
+
 	termWidth, _, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		termWidth = 80
 	}
 
 	maxFileNameWidth := min(fileNameLen, termWidth)
-	maxLinesWidth := 10
+	maxLinesWidth := numberOfLinesLen
 	maxSizeWidth := 20
 
 	var (

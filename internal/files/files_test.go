@@ -65,6 +65,10 @@ func TestFiles_FoundAllFilesInDir(t *testing.T) {
 				for _, file := range f.Name {
 					fmt.Println("returned file: ", file)
 				}
+				fmt.Println("")
+				for _, file := range tt.want {
+					fmt.Println("want: ", file)
+				}
 				return
 			}
 

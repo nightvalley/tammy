@@ -38,10 +38,17 @@ func main() {
 		return
 	}
 
+	var fileType string
+	if filetypeFlag != nil && *filetypeFlag != "" && (*filetypeFlag)[0] != '.' {
+		fileType = fmt.Sprintf(".%s", *filetypeFlag)
+	} else if filetypeFlag != nil {
+		fileType = *filetypeFlag
+	}
+
 	f := files.Files{}
 	flags := files.Flags{
 		Hidden:   *showHiddenFlag,
-		FileType: *filetypeFlag,
+		FileType: fileType,
 		ShowSize: *fileSizeFlag,
 	}
 
