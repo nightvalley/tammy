@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	availableForms := []string{"table", "list", "total"}
+	availableForms := []string{"table", "list", "total", "tree"}
 
 	var (
 		formFlag       = flag.String("f", availableForms[0], "Available forms: "+strings.Join(availableForms, ", "))
@@ -58,6 +58,8 @@ func main() {
 			forms.TableOutput(expandedPath, flags)
 		case availableForms[1]:
 			forms.ListOutput(expandedPath, flags)
+		case availableForms[3]:
+			forms.TreeOutput(expandedPath, flags)
 		case availableForms[2]:
 			f.FoundAllFilesInDir(expandedPath, flags)
 			fmt.Println(f.TotalLines)

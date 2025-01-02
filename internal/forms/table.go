@@ -5,11 +5,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
-	"golang.org/x/term"
 )
 
 const (
@@ -31,108 +29,49 @@ func TableOutput(expandedPath string, flags files.Flags) {
 		}
 	}
 
-	numberOfLinesLen := len(strconv.Itoa(f.TotalLines)) + 4
+	HeaderStyle := re.NewStyle().Foreground(firstColor).Bold(true).Align(lipgloss.Center)
+	CellStyle := re.NewStyle().Padding(0, 2)
+	OddRowStyle := CellStyle.Foreground(secondColor)
+	EvenRowStyle := CellStyle.Foreground(thirdColor)
+	BorderStyle := lipgloss.NewStyle().Foreground(firstColor)
 
-	termWidth, _, err := term.GetSize(int(os.Stdout.Fd()))
-	if err != nil {
-		termWidth = 80
-	}
-
-	maxFileNameWidth := min(fileNameLen, termWidth)
-	maxLinesWidth := numberOfLinesLen
-	maxSizeWidth := 20
-
-	var (
-		HeaderStyle  = re.NewStyle().Foreground(firstColor).Bold(true).Align(lipgloss.Center)
-		CellStyle    = re.NewStyle().Padding(0, 2)
-		OddRowStyle  = CellStyle.Foreground(secondColor)
-		EvenRowStyle = CellStyle.Foreground(thirdColor)
-		BorderStyle  = lipgloss.NewStyle().Foreground(firstColor)
-	)
-
-	if !flags.ShowSize {
-		var rows [][]string
-		for i, name := range f.Name {
-			rows = append(rows, []string{filepath.Base(name), fmt.Sprintf("%d", f.Lines[i])})
-		}
-		rows = append(rows, []string{"", ""})
-		rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
-
-		t := table.New().
-			Border(lipgloss.ThickBorder()).
-			BorderStyle(BorderStyle).
-			StyleFunc(func(row, col int) lipgloss.Style {
-				var style lipgloss.Style
-
-				switch {
-				case row == table.HeaderRow:
-					return HeaderStyle
-				case row%2 == 0:
-					style = EvenRowStyle
-				default:
-					style = OddRowStyle
-				}
-
-				if col == 0 {
-					style = style.Width(maxFileNameWidth)
-				} else if col == 1 {
-					style = style.Width(maxLinesWidth)
-				}
-
-				return style
-			}).
-			Headers("File name", "Lines").
-			Rows(rows...)
-
-		fmt.Println(t)
-	} else {
-		var rows [][]string
+	var rows [][]string
+	if flags.ShowSize {
 		for i, name := range f.Name {
 			size := f.Size[i]
-			rows = append(rows, []string{
-				filepath.Base(name),
-				fmt.Sprintf("%d", f.Lines[i]),
-				fmt.Sprintf("%.2f %s", size.Size, size.Unit),
-			})
+			rows = append(rows, createRow(filepath.Base(name), f.Lines[i], fmt.Sprintf("%.2f %s", size.Size, size.Unit)))
 		}
-		rows = append(rows, []string{"", ""})
-		rows = append(rows, []string{"Total lines", fmt.Sprintf("%d", f.TotalLines)})
-
-		t := table.New().
-			Border(lipgloss.ThickBorder()).
-			BorderStyle(BorderStyle).
-			StyleFunc(func(row, col int) lipgloss.Style {
-				var style lipgloss.Style
-
-				switch {
-				case row == table.HeaderRow:
-					return HeaderStyle
-				case row%2 == 0:
-					style = EvenRowStyle
-				default:
-					style = OddRowStyle
-				}
-
-				if col == 0 {
-					style = style.Width(maxFileNameWidth)
-				} else if col == 1 {
-					style = style.Width(maxLinesWidth)
-				} else if col == 2 {
-					style = style.Width(maxSizeWidth)
-				}
-
-				return style
-			}).
-			Headers("File name", "Lines", "Size").
-			Rows(rows...)
-
-		fmt.Println(t)
+	} else {
+		for i, name := range f.Name {
+			rows = append(rows, createRow(filepath.Base(name), f.Lines[i]))
+		}
 	}
+
+	rows = append(rows, []string{"", ""})
+	rows = append(rows, createRow("Total lines", f.TotalLines))
+
+	t := table.New().
+		Border(lipgloss.ThickBorder()).
+		BorderStyle(BorderStyle).
+		StyleFunc(func(row, col int) lipgloss.Style {
+			switch {
+			case row == table.HeaderRow:
+				return HeaderStyle
+			case row%2 == 0:
+				return EvenRowStyle
+			default:
+				return OddRowStyle
+			}
+		}).
+		Headers("File name", "Lines").
+		Rows(rows...)
+
+	fmt.Println(t)
 }
 
-func min(a, b int) int {
-	if a < b {
-		return a
+func createRow(name string, lines int, size ...string) []string {
+	if len(size) > 0 {
+		return []string{name, fmt.Sprintf("%d", lines), size[0]}
 	}
-	return b
+	return []string{name, fmt.Sprintf("%d", lines)}
 }
