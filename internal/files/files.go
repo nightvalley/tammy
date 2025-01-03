@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"io"
 	"io/fs"
-	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/charmbracelet/log"
 )
 
 type Files struct {
@@ -30,7 +31,7 @@ type Flags struct {
 func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			return err
+			return nil
 		}
 
 		if d.IsDir() {
@@ -49,7 +50,7 @@ func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 
 		lineCount, err := files.processFile(path)
 		if err != nil {
-			return err
+			return nil
 		}
 
 		if lineCount > 0 {
@@ -62,7 +63,7 @@ func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 		return nil
 	})
 	if err != nil {
-		log.Fatalf("Error: %s", err)
+		log.Error(err)
 	}
 }
 
@@ -97,7 +98,7 @@ func lineCounter(r io.Reader) int {
 func fileSize(path string) FileSize {
 	fileInfo, err := os.Stat(path)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
 	sizeInBytes := fileInfo.Size()

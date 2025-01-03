@@ -10,6 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/charmbracelet/log"
 )
 
 func main() {
@@ -34,7 +36,7 @@ func main() {
 
 	expandedPath, err := ExpandPath(path)
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Error(err)
 		return
 	}
 
@@ -70,18 +72,27 @@ func main() {
 			t := time.Now()
 			forms.TableOutput(expandedPath, flags)
 			duration := time.Since(t)
-			fmt.Printf("\nExecution time: %v\n", duration)
+			fmt.Println()
+			log.Infof("Execution time: %v", duration)
 		case availableForms[1]:
 			t := time.Now()
 			forms.ListOutput(expandedPath, flags)
 			duration := time.Since(t)
-			fmt.Printf("\nExecution time: %v\n", duration)
+			fmt.Println()
+			log.Infof("Execution time: %v", duration)
 		case availableForms[2]:
 			t := time.Now()
 			f.FoundAllFilesInDir(path, flags)
 			fmt.Println(f.TotalLines)
 			duration := time.Since(t)
-			fmt.Printf("\nExecution time: %v\n", duration)
+			fmt.Println()
+			log.Infof("Execution time: %v", duration)
+		case availableForms[3]:
+			t := time.Now()
+			forms.TreeOutput(path, flags)
+			duration := time.Since(t)
+			fmt.Println()
+			log.Infof("Execution time: %v", duration)
 		}
 	}
 }
@@ -90,7 +101,7 @@ func ExpandPath(path string) (string, error) {
 	if len(path) > 0 && path[0] == '~' {
 		usr, err := user.Current()
 		if err != nil {
-			return "", fmt.Errorf("failed to get current user: %v", err)
+			return "", fmt.Errorf("Failed to get current user: %v", err)
 		}
 		return filepath.Join(usr.HomeDir, path[1:]), nil
 	} else if path == "." {
@@ -99,12 +110,12 @@ func ExpandPath(path string) (string, error) {
 
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		return "", fmt.Errorf("failed to get absolute path: %v", err)
+		return "", fmt.Errorf("Failed to get absolute path: %v", err)
 	}
 
 	_, err = os.Stat(path)
 	if os.IsNotExist(err) {
-		return "", fmt.Errorf("path does not exist")
+		return "", fmt.Errorf("Path does not exist")
 	}
 
 	return absPath, nil
