@@ -3,16 +3,28 @@ package forms
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 	"tammy/internal/files"
 
 	"github.com/charmbracelet/lipgloss/tree"
 )
 
-func TreeOutput(expandedPath string, flags files.Flags) {
+func TreeOutput(expandedPath string, flags files.Flags, enumerator string) {
 	files := files.Files{}
 	files.FoundAllFilesInDir(expandedPath, flags)
 
-	t := tree.Root(expandedPath).Enumerator(tree.RoundedEnumerator)
+	t := tree.Root(expandedPath)
+
+	switch strings.ToLower(enumerator) {
+	case "default_enumerator":
+		t.Enumerator(tree.DefaultEnumerator)
+	case "default_indenter":
+		t.Enumerator(tree.DefaultIndenter)
+	case "rounded":
+		t.Enumerator(tree.RoundedEnumerator)
+	default:
+		t.Enumerator(tree.RoundedEnumerator)
+	}
 
 	for i, fileName := range files.Name {
 		t.Child(

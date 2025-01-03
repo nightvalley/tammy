@@ -17,23 +17,43 @@ import (
 func main() {
 	availableForms := []string{"table", "list", "total", "tree"}
 
-	var (
-		formFlag       = flag.String("f", availableForms[0], "Available forms: "+strings.Join(availableForms, ", "))
-		pathFlag       = flag.String("p", ".", "path")
-		filetypeFlag   = flag.String("ft", "", "count files with file type")
-		timeFlag       = flag.Bool("t", false, "benchmark")
-		showHiddenFlag = flag.Bool("h", false, "show hidden files")
-		fileSizeFlag   = flag.Bool("s", false, "count size of files")
-	)
-	flag.Parse()
-
+	var allwaysShowHiddenFiles bool
+	var allwaysDisplaySize bool
 	envars := make(map[string]string)
-
 	envars["defaultForm"] = os.Getenv("DEFAULT_FORM")
 	envars["allwaysDisplaySize"] = os.Getenv("ALLWAYS_DISPLAY_SIZE")
 	envars["allwaysShowHiddenFiles"] = os.Getenv("ALLWAYS_SHOW_HIDDEN_FILES")
 	envars["listEnumerator"] = os.Getenv("LIST_ENUMERATOR")
 	envars["treeEnumerator"] = os.Getenv("TREE_ENUMERATOR")
+	if envars["defaultForm"] == "" {
+		envars["defaultForm"] = "table"
+	}
+	if envars["allwaysDisplaySize"] == "" {
+		allwaysShowHiddenFiles = false
+	} else if envars["allwaysDisplaySize"] == "true" {
+		allwaysDisplaySize = true
+	}
+	if envars["allwaysShowHiddenFiles"] == "" {
+		allwaysShowHiddenFiles = false
+	} else if envars["allwaysShowHiddenFiles"] == "true" {
+		allwaysShowHiddenFiles = true
+	}
+	if envars["listEnumerator"] == "" {
+		envars["listEnumerator"] = "default_enumerator"
+	}
+	if envars["treeEnumerator"] == "" {
+		envars["treeEnumerator"] = "default_enumerator"
+	}
+
+	var (
+		formFlag       = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
+		pathFlag       = flag.String("p", ".", "Path")
+		filetypeFlag   = flag.String("ft", "", "Count files with file type")
+		timeFlag       = flag.Bool("time", false, "Benchmark")
+		showHiddenFlag = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
+		fileSizeFlag   = flag.Bool("s", allwaysDisplaySize, "Show size of files")
+	)
+	flag.Parse()
 
 	var path string
 	if flag.NArg() > 0 {
@@ -69,7 +89,7 @@ func main() {
 		case availableForms[1]:
 			forms.ListOutput(expandedPath, flags, envars["listEnumerator"])
 		case availableForms[3]:
-			forms.TreeOutput(expandedPath, flags)
+			forms.TreeOutput(expandedPath, flags, envars["treeEnumerator"])
 		case availableForms[2]:
 			f.FoundAllFilesInDir(expandedPath, flags)
 			fmt.Println(f.TotalLines)
@@ -97,7 +117,7 @@ func main() {
 			log.Infof("Execution time: %v", duration)
 		case availableForms[3]:
 			t := time.Now()
-			forms.TreeOutput(path, flags)
+			forms.TreeOutput(path, flags, envars["treeEnumerator"])
 			duration := time.Since(t)
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
