@@ -6,6 +6,7 @@ import (
 	"strings"
 	"tammy/internal/files"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/list"
 )
 
@@ -13,7 +14,7 @@ func ListOutput(expandedPath string, flags files.Flags, enumerator string) {
 	files := files.Files{}
 	files.FoundAllFilesInDir(expandedPath, flags)
 
-	l := list.New()
+	l := list.New().EnumeratorStyle(lipgloss.NewStyle().Foreground(firstColor).BorderForeground(firstColor))
 	for i, name := range files.Name {
 		addFileInfoToList(l, name, files.Lines[i], files.Size[i], flags.ShowSize)
 	}

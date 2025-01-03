@@ -6,6 +6,7 @@ import (
 	"strings"
 	"tammy/internal/files"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/tree"
 )
 
@@ -13,7 +14,12 @@ func TreeOutput(expandedPath string, flags files.Flags, enumerator string) {
 	files := files.Files{}
 	files.FoundAllFilesInDir(expandedPath, flags)
 
-	t := tree.Root(expandedPath)
+	t := tree.Root(expandedPath).
+		EnumeratorStyle(
+			lipgloss.NewStyle().
+				Foreground(firstColor).
+				BorderForeground(firstColor).
+				Align(lipgloss.Center))
 
 	switch strings.ToLower(enumerator) {
 	case "default_enumerator":
