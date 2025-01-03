@@ -54,9 +54,22 @@ func main() {
 		showHiddenFlag  = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
 		fileSizeFlag    = flag.Bool("s", allwaysDisplaySize, "Show size of files")
 		showHelpMessage = flag.Bool("help", false, "Show help message")
-		// version         = flag.Bool("version", false, "Check version")
+		version         = flag.Bool("version", false, "Check version")
 	)
 	flag.Parse()
+
+	if *version {
+		updatesAvailable, err := help.CheckForUpdates()
+		if err != nil {
+			fmt.Println("Error checking for updates:", err)
+			os.Exit(1)
+		}
+		if updatesAvailable {
+			log.Info("New updates are available!\n Repo link: https://github.com/PutaMadre1337/tammy")
+		} else {
+			log.Info("You are using the latest version.")
+		}
+	}
 
 	if *showHelpMessage {
 		help.ShowHelpMessage()
