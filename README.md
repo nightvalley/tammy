@@ -6,13 +6,14 @@ You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t
 - by default hidden files are not taken into account by the program, but the `-h` flag will fix this.
 
 # Installation
+## Install binary file from github release
+See: [Releases](https://github.com/PutaMadre1337/tammy/releases)
+
 ## Sh script for linux
 Build binary and copy it to your /usr/bin (using sudo)
 ```sh
 git clone https://github.com/PutaMadre1337/tammy && cd tammy && chmod +x installation.sh
 ```
-## Install binary file from github release
-See: [Releases](https://github.com/PutaMadre1337/tammy/releases)
 
 # Configuration
 ```sh
