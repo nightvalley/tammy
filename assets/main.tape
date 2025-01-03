@@ -72,5 +72,7 @@ Type "tammy -f tree cmd/testfiles/" Enter
 Sleep 500ms
 Type "tammy -f tree -ft json cmd/testfiles/" Enter
 Sleep 500ms
+Type "tammy -s -ft .txt cmd/testfiles/" Enter
+Sleep 500ms
 
 Sleep 5s
