@@ -1,6 +1,8 @@
 .PHONY: build clean
 
-OS := $(shell uname)
+release:
+	go build -o ./bin/tammy ./cmd/main.go
+	git push
 
 build:
 	go build -o /usr/bin/tammy ./cmd/main.go
