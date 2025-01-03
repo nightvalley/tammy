@@ -1,7 +1,5 @@
 .PHONY: build clean
 
-OS := $(shell uname)
-
 build:
 	go build -o /usr/bin/tammy ./cmd/main.go
 
