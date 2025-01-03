@@ -6,10 +6,13 @@ You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t
 - by default hidden files are not taken into account by the program, but the `-h` flag will fix this.
 
 # Installation
-Build binary and copy it to your /usr/bin for linux
+## Sh script for linux
+Build binary and copy it to your /usr/bin (using sudo)
 ```sh
-git clone https://github.com/PutaMadre1337/CountLines && cd CountLines && go build -o countlines $(find cmd/main.go) && sudo cp countlines /usr/bin && cd .. && rm -rf CountLines
+git clone https://github.com/PutaMadre1337/tammy && cd tammy && chmod +x installation.sh
 ```
+## Install binary file from github release
+See: [Releases](https://github.com/PutaMadre1337/tammy/releases)
 
 # Configuration
 ```sh
@@ -28,7 +31,7 @@ tammy
 
 ## Flags
 - `tammy -f`:
-  + Available forms: table, list, total, tree (default - table).
+  + Change output format. Available forms: table, list, total, tree (default - table).
 - `tammy -h`:
   + Show hidden files.
 - `tammy -s`:
