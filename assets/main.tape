@@ -55,7 +55,7 @@
 #   Hide                            Hide the subsequent commands from the output
 #   Show                            Show the subsequent commands in the output
 
-Output main.gif
+Output assets/main.gif
 
 Require tammy
 
@@ -64,13 +64,13 @@ Set FontSize 20
 Set Width 1200
 Set Height 600
 
-Type "tammy ../cmd/testfiles/" Enter
+Type "tammy cmd/testfiles/" Enter
 Sleep 500ms
-Type "tammy -f list ../cmd/testfiles/" Enter
+Type "tammy -f list cmd/testfiles/" Enter
 Sleep 500ms
-Type "tammy -f tree ../cmd/testfiles/" Enter
+Type "tammy -f tree cmd/testfiles/" Enter
 Sleep 500ms
-Type "tammy -f tree -ft json ../cmd/testfiles/" Enter
+Type "tammy -f tree -ft json cmd/testfiles/" Enter
 Sleep 500ms
 
 Sleep 5s
