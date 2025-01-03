@@ -1,6 +1,6 @@
 # About
 A small Cli-Utility that will calculate for you the number of lines in all files and directories starting from your current directory.
-You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t file) | wc -l)"'`, and it will be even faster to count lines in all files, but my program has some svistoperdelki, for example:
+You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t file) | wc -l)"'`, and it can work even faster, but my program has some svistoperdelki, for example:
 - you can only count lines in files that match the desired extension.
 - the program can display a table, list or tree of files with the number of lines and their size.
 - by default hidden files are not taken into account by the program, but the `-h` flag will fix this.
@@ -45,6 +45,8 @@ tammy
   + Show execution time.
 - `tammy -help`:
   + Show help message.
+- `tammy -version`:
+  + Check for updates.
 
 # Configuring
 The utility is configured using environment variables. Available variables:
