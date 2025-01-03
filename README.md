@@ -20,15 +20,6 @@ git clone https://github.com/PutaMadre1337/tammy && cd tammy && chmod +x install
 git clone https://github.com/PutaMadre1337/tammy && cd tammy && make build
 ```
 
-# Configuration
-```sh
-export DEFAULT_FORM="table"
-export ALLWAYS_DISPLAY_SIZE="false"
-export ALLWAYS_SHOW_HIDDEN_FILES="false"
-export LIST_ENUMERATOR="Roman"
-export TREE_ENUMERATOR="RoundedEnumerator"
-```
-
 # Usage
 Display information about files in the current directory:
 ```sh
