@@ -1,3 +1,5 @@
+![GIF](assets/main.gif)
+
 # About
 A small Cli-Utility that will calculate for you the number of lines in all files and directories starting from your current directory.
 You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t file) | wc -l)"'`, and it can work even faster, but my program has some svistoperdelki, for example:
