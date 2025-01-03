@@ -7,7 +7,7 @@ You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t
 
 # Installation
 ## Install binary file from github release
-See: [Releases](https://github.com/PutaMadre1337/tammy/releases)
+See: [Releases](https://github.com/PutaMadre1337/tammy/releases/latest)
 
 ## Sh script for linux
 Build binary and copy it to your /usr/bin (<u>using sudo</u>).
