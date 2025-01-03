@@ -26,6 +26,8 @@ tammy
   + Count lines only in files with a certain extension. Example: tammy -ft md, or tammy -ft .md.
 - tammy -t:
   + Show execution time.
+- tammy -version
+  + Check for updates.
 
 # Configuring
 The utility is configured using environment variables. Available variables:
