@@ -1,10 +1,10 @@
 package forms
 
 import (
-	"CountLines/internal/files"
 	"fmt"
 	"os"
 	"path/filepath"
+	"tammy/internal/files"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"

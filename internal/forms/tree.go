@@ -1,9 +1,9 @@
 package forms
 
 import (
-	"CountLines/internal/files"
 	"fmt"
 	"path/filepath"
+	"tammy/internal/files"
 
 	"github.com/charmbracelet/lipgloss/tree"
 )

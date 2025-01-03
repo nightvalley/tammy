@@ -1,4 +1,4 @@
-module CountLines
+module tammy
 
 go 1.23.4
 

@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	main "CountLines/cmd"
+	main "tammy/cmd"
 	"testing"
 )
 

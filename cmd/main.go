@@ -1,14 +1,14 @@
 package main
 
 import (
-	"CountLines/internal/files"
-	"CountLines/internal/forms"
 	"flag"
 	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
 	"strings"
+	"tammy/internal/files"
+	"tammy/internal/forms"
 	"time"
 
 	"github.com/charmbracelet/log"
@@ -26,6 +26,14 @@ func main() {
 		fileSizeFlag   = flag.Bool("s", false, "count size of files")
 	)
 	flag.Parse()
+
+	envars := make(map[string]string)
+
+	envars["defaultForm"] = os.Getenv("DEFAULT_FORM")
+	envars["allwaysDisplaySize"] = os.Getenv("ALLWAYS_DISPLAY_SIZE")
+	envars["allwaysShowHiddenFiles"] = os.Getenv("ALLWAYS_SHOW_HIDDEN_FILES")
+	envars["listEnumerator"] = os.Getenv("LIST_ENUMERATOR")
+	envars["treeEnumerator"] = os.Getenv("TREE_ENUMERATOR")
 
 	var path string
 	if flag.NArg() > 0 {
@@ -59,7 +67,7 @@ func main() {
 		case availableForms[0]:
 			forms.TableOutput(expandedPath, flags)
 		case availableForms[1]:
-			forms.ListOutput(expandedPath, flags)
+			forms.ListOutput(expandedPath, flags, envars["listEnumerator"])
 		case availableForms[3]:
 			forms.TreeOutput(expandedPath, flags)
 		case availableForms[2]:
@@ -76,7 +84,7 @@ func main() {
 			log.Infof("Execution time: %v", duration)
 		case availableForms[1]:
 			t := time.Now()
-			forms.ListOutput(expandedPath, flags)
+			forms.ListOutput(expandedPath, flags, envars["listEnumerator"])
 			duration := time.Since(t)
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)

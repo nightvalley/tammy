@@ -10,5 +10,14 @@ For usage see `--help` flag.
 # Installation
 Build binary and copy it to your /usr/bin for linux
 ```sh
-  git clone https://github.com/PutaMadre1337/CountLines && cd CountLines && go build -o countlines $(find cmd/main.go) && sudo cp countlines /usr/bin && cd .. && rm -rf CountLines
+git clone https://github.com/PutaMadre1337/CountLines && cd CountLines && go build -o countlines $(find cmd/main.go) && sudo cp countlines /usr/bin && cd .. && rm -rf CountLines
+```
+
+# Configuration
+```sh
+export DEFAULT_FORM="table"
+export ALLWAYS_DISPLAY_SIZE="false"
+export ALLWAYS_SHOW_HIDDEN_FILES="false"
+export LIST_ENUMERATOR="Roman"
+export TREE_ENUMERATOR="RoundedEnumerator"
 ```
