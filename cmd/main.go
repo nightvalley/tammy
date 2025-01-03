@@ -7,6 +7,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+	help "tammy/internal"
 	"tammy/internal/files"
 	"tammy/internal/forms"
 	"time"
@@ -46,14 +47,21 @@ func main() {
 	}
 
 	var (
-		formFlag       = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
-		pathFlag       = flag.String("p", ".", "Path")
-		filetypeFlag   = flag.String("ft", "", "Count files with file type")
-		timeFlag       = flag.Bool("time", false, "Benchmark")
-		showHiddenFlag = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
-		fileSizeFlag   = flag.Bool("s", allwaysDisplaySize, "Show size of files")
+		formFlag        = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
+		pathFlag        = flag.String("p", ".", "Path")
+		filetypeFlag    = flag.String("ft", "", "Count files with file type")
+		timeFlag        = flag.Bool("time", false, "Benchmark")
+		showHiddenFlag  = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
+		fileSizeFlag    = flag.Bool("s", allwaysDisplaySize, "Show size of files")
+		showHelpMessage = flag.Bool("help", false, "Show help message")
+		// version         = flag.Bool("version", false, "Check version")
 	)
 	flag.Parse()
+
+	if *showHelpMessage {
+		help.ShowHelpMessage()
+		os.Exit(0)
+	}
 
 	var path string
 	if flag.NArg() > 0 {
