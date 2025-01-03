@@ -69,6 +69,7 @@ func main() {
 		} else {
 			log.Info("You are using the latest version.")
 		}
+		os.Exit(0)
 	}
 
 	if *showHelpMessage {
