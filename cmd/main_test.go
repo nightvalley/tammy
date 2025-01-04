@@ -21,19 +21,19 @@ func Test_expandPath(t *testing.T) {
 		{
 			name:    "current directory",
 			path:    ".",
-			want:    "/home/username/Development/Golang/Projects/Cli/tammy/cmd",
+			want:    "/home/username/Development/Golang/Cli/tammy/cmd",
 			wantErr: false,
 		},
 		{
 			name:    "absolute path",
-			path:    "/home/username/Development/Golang/Projects/Cli/tammy/",
-			want:    "/home/username/Development/Golang/Projects/Cli/tammy",
+			path:    "/home/username/Development/Golang/Cli/tammy/",
+			want:    "/home/username/Development/Golang/Cli/tammy",
 			wantErr: false,
 		},
 		{
 			name:    "relative path",
 			path:    "testfiles",
-			want:    "/home/username/Development/Golang/Projects/Cli/tammy/cmd/testfiles",
+			want:    "/home/username/Development/Golang/Cli/tammy/cmd/testfiles",
 			wantErr: false,
 		},
 		{

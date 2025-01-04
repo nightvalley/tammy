@@ -18,31 +18,31 @@ func TestFiles_FoundAllFilesInDir(t *testing.T) {
 		{
 			name:   "without hidden files",
 			hidden: false,
-			path:   "/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles",
+			path:   "/home/username/Development/Golang/Cli/tammy/cmd/testfiles",
 			want: []string{
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/b.txt",
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/a.json",
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/sisya.pisya",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/b.txt",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/a.json",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/sisya.pisya",
 			},
 		},
 		{
 			name:   "with hidden files",
 			hidden: true,
-			path:   "/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles",
+			path:   "/home/username/Development/Golang/Cli/tammy/cmd/testfiles",
 			want: []string{
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/b.txt",
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/a.json",
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/sisya.pisya",
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/.pipiska.pipiska",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/b.txt",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/a.json",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/sisya.pisya",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/.pipiska.pipiska",
 			},
 		},
 		{
 			name:     "with file type",
 			hidden:   false,
 			filetype: ".json",
-			path:     "/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles",
+			path:     "/home/username/Development/Golang/Cli/tammy/cmd/testfiles",
 			want: []string{
-				"/home/username/Development/Golang/Pet-Projects/Cli/tammy/cmd/testfiles/with-lines/a.json",
+				"/home/username/Development/Golang/Cli/tammy/cmd/testfiles/with-lines/a.json",
 			},
 		},
 	}
