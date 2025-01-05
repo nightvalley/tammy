@@ -33,9 +33,11 @@ type FileSize struct {
 }
 
 type Flags struct {
-	ShowSize bool
-	Hidden   bool
-	FileType string
+	ShowSize              bool
+	Hidden                bool
+	FileType              string
+	Form                  string
+	IgnoredFileExtensions string
 }
 
 func (files *Files) ExploreDirectory(path string, flags Flags) {
@@ -51,6 +53,22 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 			return nil
 		}
 
+		ignoredFileExtensions := []string{
+			".png", ".jpg", ".jpeg", ".gif", ".ico",
+			".bmp", ".tiff", ".svg",
+			".mp3", ".wav", ".flac",
+			".mp4", ".avi", ".mkv",
+			".zip", ".rar", ".tar",
+			".exe", ".dll",
+			".bin", ".dat",
+			".ttf", ".otf",
+		}
+
+		for _, ext := range ignoredFileExtensions {
+			if filepath.Ext(path) == ext {
+				return nil
+			}
+		}
 		if flags.FileType != "" && flags.FileType != filepath.Ext(path) {
 			return nil
 		}
