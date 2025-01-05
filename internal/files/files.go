@@ -10,6 +10,16 @@ import (
 	"github.com/charmbracelet/log"
 )
 
+type FileStatistics interface {
+	fileSize(path string) FileSize
+	lineCounter(r io.Reader) int
+}
+
+type CollectFileStats interface {
+	ExploreDirectory(path string, flags Flags)
+	processFile(filepath string) (int, error)
+}
+
 type Files struct {
 	TotalLines int
 	Name       []string
@@ -28,7 +38,7 @@ type Flags struct {
 	FileType string
 }
 
-func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
+func (files *Files) ExploreDirectory(path string, flags Flags) {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return nil

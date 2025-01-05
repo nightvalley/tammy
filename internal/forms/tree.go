@@ -12,7 +12,7 @@ import (
 
 func TreeOutput(expandedPath string, flags files.Flags, enumerator string) {
 	files := files.Files{}
-	files.FoundAllFilesInDir(expandedPath, flags)
+	files.ExploreDirectory(expandedPath, flags)
 
 	t := tree.Root(expandedPath).
 		EnumeratorStyle(

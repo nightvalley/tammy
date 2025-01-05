@@ -18,7 +18,7 @@ const (
 
 func TableOutput(expandedPath string, flags files.Flags) {
 	files := files.Files{}
-	files.FoundAllFilesInDir(expandedPath, flags)
+	files.ExploreDirectory(expandedPath, flags)
 
 	re := lipgloss.NewRenderer(os.Stdout)
 

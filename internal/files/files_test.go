@@ -55,7 +55,7 @@ func TestFiles_FoundAllFilesInDir(t *testing.T) {
 				FileType: tt.filetype,
 			}
 
-			f.FoundAllFilesInDir(tt.path, flags)
+			f.ExploreDirectory(tt.path, flags)
 
 			sort.Strings(f.Name)
 			sort.Strings(tt.want)
