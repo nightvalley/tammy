@@ -113,7 +113,7 @@ func main() {
 		case availableForms[3]:
 			forms.TreeOutput(expandedPath, flags, envars["treeEnumerator"])
 		case availableForms[2]:
-			f.FoundAllFilesInDir(expandedPath, flags)
+			f.ExploreDirectory(expandedPath, flags)
 			fmt.Println(f.TotalLines)
 		}
 	} else {
@@ -132,7 +132,7 @@ func main() {
 			log.Infof("Execution time: %v", duration)
 		case availableForms[2]:
 			t := time.Now()
-			f.FoundAllFilesInDir(path, flags)
+			f.ExploreDirectory(path, flags)
 			fmt.Println(f.TotalLines)
 			duration := time.Since(t)
 			fmt.Println()

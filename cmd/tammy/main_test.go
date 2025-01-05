@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	main "tammy/cmd"
+	main "tammy/cmd/tammy"
 	"testing"
 )
 
@@ -21,7 +21,7 @@ func Test_expandPath(t *testing.T) {
 		{
 			name:    "current directory",
 			path:    ".",
-			want:    "/home/username/Development/Golang/Cli/tammy/cmd",
+			want:    "/home/username/Development/Golang/Cli/tammy/cmd/tammy",
 			wantErr: false,
 		},
 		{
@@ -33,7 +33,7 @@ func Test_expandPath(t *testing.T) {
 		{
 			name:    "relative path",
 			path:    "testfiles",
-			want:    "/home/username/Development/Golang/Cli/tammy/cmd/testfiles",
+			want:    "/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles",
 			wantErr: false,
 		},
 		{
