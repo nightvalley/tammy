@@ -1,9 +1,9 @@
-package files_test
+package fileutils_test
 
 import (
 	"fmt"
 	"sort"
-	"tammy/internal/files"
+	"tammy/internal/fileutils"
 	"testing"
 )
 
@@ -49,8 +49,8 @@ func TestFiles_FoundAllFilesInDir(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var f files.Files
-			flags := files.Flags{
+			var f fileutils.Files
+			flags := fileutils.Flags{
 				Hidden:   tt.hidden,
 				FileType: tt.filetype,
 			}
