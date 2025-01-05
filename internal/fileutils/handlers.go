@@ -69,6 +69,9 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 				return nil
 			}
 		}
+		if flags.IgnoredFileExtensions != "" && filepath.Ext(path) == flags.IgnoredFileExtensions {
+			return nil
+		}
 		if flags.FileType != "" && flags.FileType != filepath.Ext(path) {
 			return nil
 		}
