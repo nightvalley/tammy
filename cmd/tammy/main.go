@@ -47,14 +47,15 @@ func main() {
 	}
 
 	var (
-		formFlag        = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
-		pathFlag        = flag.String("p", ".", "Path")
-		filetypeFlag    = flag.String("ft", "", "Count files with file type")
-		timeFlag        = flag.Bool("time", false, "Benchmark")
-		showHiddenFlag  = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
-		fileSizeFlag    = flag.Bool("s", allwaysDisplaySize, "Show size of files")
-		showHelpMessage = flag.Bool("help", false, "Show help message")
-		version         = flag.Bool("version", false, "Check version")
+		formFlag          = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
+		pathFlag          = flag.String("p", ".", "Path")
+		fileExtFlag       = flag.String("ft", "", "Count files with file type")
+		ignoreFileExtFlag = flag.String("i", "", "Ignore files with file type")
+		timeFlag          = flag.Bool("time", false, "Benchmark")
+		showHiddenFlag    = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
+		fileSizeFlag      = flag.Bool("s", allwaysDisplaySize, "Show size of files")
+		showHelpMessage   = flag.Bool("help", false, "Show help message")
+		version           = flag.Bool("version", false, "Check version")
 	)
 	flag.Parse()
 
@@ -90,18 +91,15 @@ func main() {
 		return
 	}
 
-	var fileType string
-	if filetypeFlag != nil && *filetypeFlag != "" && (*filetypeFlag)[0] != '.' {
-		fileType = fmt.Sprintf(".%s", *filetypeFlag)
-	} else if filetypeFlag != nil {
-		fileType = *filetypeFlag
-	}
+	fileType := formatFileType(fileExtFlag)
+	ignorefileExtFlag := formatFileType(ignoreFileExtFlag)
 
 	f := fileutils.Files{}
 	flags := fileutils.Flags{
-		Hidden:   *showHiddenFlag,
-		FileType: fileType,
-		ShowSize: *fileSizeFlag,
+		Hidden:                *showHiddenFlag,
+		ShowSize:              *fileSizeFlag,
+		FileType:              fileType,
+		IgnoredFileExtensions: ignorefileExtFlag,
 	}
 
 	if !*timeFlag {
@@ -169,4 +167,14 @@ func ExpandPath(path string) (string, error) {
 	}
 
 	return absPath, nil
+}
+
+func formatFileType(flag *string) string {
+	if flag != nil && *flag != "" {
+		if (*flag)[0] != '.' {
+			return fmt.Sprintf(".%s", *flag)
+		}
+		return *flag
+	}
+	return ""
 }
