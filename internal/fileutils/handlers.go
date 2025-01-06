@@ -40,6 +40,12 @@ type Flags struct {
 	IgnoredFileExtensions string
 }
 
+const (
+	Kilobyte = 1024
+	Megabyte = 1024 * Kilobyte
+	Gigabyte = 1024 * Megabyte
+)
+
 func (files *Files) ExploreDirectory(path string, flags Flags) {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -109,7 +115,7 @@ func (files *Files) processFile(filepath string) (int, error) {
 }
 
 func lineCounter(r io.Reader) int {
-	buf := make([]byte, 32*1024)
+	buf := make([]byte, Megabyte)
 	count := 0
 	lineSep := []byte{'\n'}
 
@@ -138,16 +144,16 @@ func fileSize(path string) FileSize {
 	size.Size = float64(sizeInBytes)
 
 	switch {
-	case sizeInBytes < 1024:
+	case sizeInBytes < Kilobyte:
 		size.Unit = "b"
-	case sizeInBytes < 1024*1024:
+	case sizeInBytes < Megabyte:
 		size.Size /= 1024
 		size.Unit = "KB"
-	case sizeInBytes < 1024*1024*1024:
+	case sizeInBytes < Gigabyte:
 		size.Size /= (1024 * 1024)
 		size.Unit = "MB"
 	default:
-		size.Size /= (1024 * 1024 * 1024)
+		size.Size /= (Gigabyte)
 		size.Unit = "GB"
 	}
 
