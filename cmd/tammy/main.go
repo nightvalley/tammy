@@ -120,12 +120,14 @@ func main() {
 			t := time.Now()
 			forms.TableOutput(expandedPath, flags)
 			duration := time.Since(t)
+
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[1]:
 			t := time.Now()
 			forms.ListOutput(expandedPath, flags, envars["listEnumerator"])
 			duration := time.Since(t)
+
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[2]:
@@ -133,14 +135,16 @@ func main() {
 			f.ExploreDirectory(path, flags)
 			fmt.Println(f.TotalLines)
 			duration := time.Since(t)
+
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[3]:
 			t := time.Now()
 			forms.TreeOutput(path, flags, envars["treeEnumerator"])
 			duration := time.Since(t)
+
 			fmt.Println()
-			log.Infof("Execution time: %v", duration)
+			log.Info("Execution time: %v", duration)
 		}
 	}
 }
@@ -169,6 +173,7 @@ func ExpandPath(path string) (string, error) {
 	return absPath, nil
 }
 
+// TODO: добавить разделение строк с помощью strings.Split для возврата среза с файловыми типами
 func formatFileType(flag *string) string {
 	if flag != nil && *flag != "" {
 		if (*flag)[0] != '.' {
