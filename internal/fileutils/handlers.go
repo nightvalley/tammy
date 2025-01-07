@@ -2,12 +2,15 @@ package fileutils
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/charmbracelet/log"
+	"github.com/mackerelio/go-osstat/memory"
 )
 
 type FileStatistics interface {
@@ -59,44 +62,60 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 			return nil
 		}
 
-		ignoredFileExtensions := []string{
-			".png", ".jpg", ".jpeg", ".gif", ".ico",
-			".bmp", ".tiff", ".svg",
-			".mp3", ".wav", ".flac",
-			".mp4", ".avi", ".mkv",
-			".zip", ".rar", ".tar",
-			".exe", ".dll",
-			".bin", ".dat",
-			".ttf", ".otf",
-		}
-
-		for _, ext := range ignoredFileExtensions {
-			if filepath.Ext(path) == ext {
-				return nil
-			}
-		}
-		if flags.IgnoredFileExtensions != "" && filepath.Ext(path) == flags.IgnoredFileExtensions {
-			return nil
-		}
-		if flags.FileType != "" && flags.FileType != filepath.Ext(path) {
-			return nil
-		}
-		if !flags.Hidden && filepath.Base(path)[0] == '.' {
+		if flags.ignoreFile(path) {
 			return nil
 		}
 
-		lineCount, err := files.processFile(path)
+		maxGoroutines, err := calculateGoroutines(path)
 		if err != nil {
-			return nil
+			log.Error(err)
 		}
+		sem := make(chan struct{}, maxGoroutines)
+		var wg sync.WaitGroup
+		var names []string
+		var lines []int
+		var totalLines int
 
-		if lineCount > 0 {
-			size := fileSize(path)
-			files.Size = append(files.Size, size)
-			files.Name = append(files.Name, path)
-			files.Lines = append(files.Lines, lineCount)
-			files.TotalLines += lineCount
-		}
+		sem <- struct{}{}
+		wg.Add(1)
+		go func(path string) {
+			defer wg.Done()
+			defer func() { <-sem }()
+
+			fileBytes, err := os.Open(path)
+			if err != nil {
+				log.Error("failed to open file", err)
+				return
+			}
+			defer fileBytes.Close()
+
+			lineCount := lineCounter(fileBytes)
+			if lineCount > 0 {
+				names = append(names, path)
+				lines = append(lines, lineCount)
+				totalLines += lineCount
+			}
+		}(path)
+
+		wg.Add(1)
+		go func(path string) {
+			defer wg.Done()
+			size, unit := fileSize(path)
+
+			sizeStruct := FileSize{
+				Size: size,
+				Unit: unit,
+			}
+
+			files.Size = append(files.Size, sizeStruct)
+		}(path)
+
+		wg.Wait()
+
+		files.Name = append(files.Name, names...)
+		files.Lines = append(files.Lines, lines...)
+		files.TotalLines += totalLines
+
 		return nil
 	})
 	if err != nil {
@@ -104,14 +123,46 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 	}
 }
 
-func (files *Files) processFile(filepath string) (int, error) {
-	fileBytes, err := os.Open(filepath)
-	if err != nil {
-		return 0, err
-	}
-	defer fileBytes.Close()
+func (flags *Flags) ignoreFile(path string) bool {
+	ignoredFileExtensions := []string{
+		".png", ".jpg", ".jpeg", ".gif", ".ico",
+		".bmp", ".tiff", ".svg", ".mp3", ".wav",
+		".flac", ".mp4", ".avi", ".mkv", ".zip",
+		".rar", ".tar", ".exe", ".dll", ".bin",
+		".dat", ".ttf", ".otf",
+		".xls", ".xlsx",
 
-	return lineCounter(fileBytes), nil
+		".pdf",
+		".doc", ".docx",
+	}
+
+	if isBinary(path) {
+		return true
+	}
+
+	if flags.IgnoredFileExtensions != "" && filepath.Ext(path) == flags.IgnoredFileExtensions {
+		return true
+	}
+
+	if flags.FileType != "" && flags.FileType != filepath.Ext(path) {
+		return true
+	}
+
+	if !flags.Hidden && filepath.Base(path)[0] == '.' {
+		return true
+	}
+
+	for _, ext := range ignoredFileExtensions {
+		if filepath.Ext(path) == ext {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isBinary(path string) bool {
+	return false
 }
 
 func lineCounter(r io.Reader) int {
@@ -132,30 +183,45 @@ func lineCounter(r io.Reader) int {
 	}
 }
 
-func fileSize(path string) FileSize {
+func fileSize(path string) (float64, string) {
 	fileInfo, err := os.Stat(path)
 	if err != nil {
 		log.Error(err)
+		return 0, ""
 	}
 
 	sizeInBytes := fileInfo.Size()
-	var size FileSize
-
-	size.Size = float64(sizeInBytes)
+	var size float64
+	var unit string
 
 	switch {
 	case sizeInBytes < Kilobyte:
-		size.Unit = "b"
+		size = float64(sizeInBytes)
+		unit = "b"
 	case sizeInBytes < Megabyte:
-		size.Size /= 1024
-		size.Unit = "KB"
+		size = float64(sizeInBytes) / 1024
+		unit = "KB"
 	case sizeInBytes < Gigabyte:
-		size.Size /= (1024 * 1024)
-		size.Unit = "MB"
+		size = float64(sizeInBytes) / (1024 * 1024)
+		unit = "MB"
 	default:
-		size.Size /= (Gigabyte)
-		size.Unit = "GB"
+		size = float64(sizeInBytes) / Gigabyte
+		unit = "GB"
 	}
 
-	return size
+	return size, unit
+}
+
+func calculateGoroutines(files string) (int, error) {
+	memory, err := memory.Get()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get memory: %v", err)
+	}
+
+	maxGoroutines := int(memory.Free / (1 << 20))
+	if maxGoroutines > len(files) {
+		maxGoroutines = len(files)
+	}
+
+	return maxGoroutines, nil
 }
