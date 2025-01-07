@@ -7,7 +7,6 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-	"sync"
 
 	"github.com/charmbracelet/log"
 	"github.com/mackerelio/go-osstat/memory"
@@ -49,7 +48,7 @@ const (
 	Gigabyte = 1024 * Megabyte
 )
 
-func (files *Files) ExploreDirectory(path string, flags Flags) {
+func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return nil
@@ -66,56 +65,18 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 			return nil
 		}
 
-		maxGoroutines, err := calculateGoroutines(path)
+		lineCount, err := files.processFile(path)
 		if err != nil {
-			log.Error(err)
+			return nil
 		}
-		sem := make(chan struct{}, maxGoroutines)
-		var wg sync.WaitGroup
-		var names []string
-		var lines []int
-		var totalLines int
 
-		sem <- struct{}{}
-		wg.Add(1)
-		go func(path string) {
-			defer wg.Done()
-			defer func() { <-sem }()
-
-			fileBytes, err := os.Open(path)
-			if err != nil {
-				log.Error("failed to open file", err)
-				return
-			}
-			defer fileBytes.Close()
-
-			lineCount := lineCounter(fileBytes)
-			if lineCount > 0 {
-				names = append(names, path)
-				lines = append(lines, lineCount)
-				totalLines += lineCount
-			}
-		}(path)
-
-		wg.Add(1)
-		go func(path string) {
-			defer wg.Done()
-			size, unit := fileSize(path)
-
-			sizeStruct := FileSize{
-				Size: size,
-				Unit: unit,
-			}
-
-			files.Size = append(files.Size, sizeStruct)
-		}(path)
-
-		wg.Wait()
-
-		files.Name = append(files.Name, names...)
-		files.Lines = append(files.Lines, lines...)
-		files.TotalLines += totalLines
-
+		if lineCount > 0 {
+			size := fileSize(path)
+			files.Size = append(files.Size, size)
+			files.Name = append(files.Name, path)
+			files.Lines = append(files.Lines, lineCount)
+			files.TotalLines += lineCount
+		}
 		return nil
 	})
 	if err != nil {
