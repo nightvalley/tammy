@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/charmbracelet/log"
 )
@@ -88,39 +89,40 @@ func (flags *Flags) ignoreFile(path string) bool {
 		".bmp", ".tiff", ".svg", ".mp3", ".wav",
 		".flac", ".mp4", ".avi", ".mkv", ".zip",
 		".rar", ".tar", ".exe", ".dll", ".bin",
-		".dat", ".ttf", ".otf",
-		".xls", ".xlsx",
-
-		".pdf",
-		".doc", ".docx",
+		".dat", ".ttf", ".otf", ".xls", ".xlsx",
+		".pdf", ".doc", ".docx",
 	}
 
-	if isBinary(path) {
+	ext := strings.ToLower(filepath.Ext(path))
+
+	log.SetLevel(log.DebugLevel)
+	if ext == "%" || ext == "" {
+		log.Debugf("Ignore %s because he doesnt have extension", path)
 		return true
 	}
 
-	if flags.IgnoredFileExtensions != "" && filepath.Ext(path) == flags.IgnoredFileExtensions {
-		return true
-	}
-
-	if flags.FileType != "" && flags.FileType != filepath.Ext(path) {
-		return true
-	}
-
-	if !flags.Hidden && filepath.Base(path)[0] == '.' {
-		return true
-	}
-
-	for _, ext := range ignoredFileExtensions {
-		if filepath.Ext(path) == ext {
+	for _, ignoredExt := range ignoredFileExtensions {
+		if ext == ignoredExt {
+			log.Debug("Ignore file from ignoredFileExtensions slice: ", path)
 			return true
 		}
 	}
 
-	return false
-}
+	if flags.IgnoredFileExtensions != "" && ext == strings.ToLower(flags.IgnoredFileExtensions) {
+		log.Debug("Ignore file extension flag ", path)
+		return true
+	}
 
-func isBinary(path string) bool {
+	if flags.FileType != "" && flags.FileType != ext {
+		log.Debugf("Ignoring file %s because it does not match file extension flag", path)
+		return true
+	}
+
+	if !flags.Hidden && strings.HasPrefix(filepath.Base(path), ".") {
+		log.Debug("Ignore file %s because he is hidden", path)
+		return true
+	}
+
 	return false
 }
 
