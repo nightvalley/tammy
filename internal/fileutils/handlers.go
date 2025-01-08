@@ -95,31 +95,25 @@ func (flags *Flags) ignoreFile(path string) bool {
 
 	ext := strings.ToLower(filepath.Ext(path))
 
-	log.SetLevel(log.DebugLevel)
 	if ext == "%" || ext == "" {
-		log.Debugf("Ignore %s because he doesnt have extension", path)
 		return true
 	}
 
 	for _, ignoredExt := range ignoredFileExtensions {
 		if ext == ignoredExt {
-			log.Debug("Ignore file from ignoredFileExtensions slice: ", path)
 			return true
 		}
 	}
 
 	if flags.IgnoredFileExtensions != "" && ext == strings.ToLower(flags.IgnoredFileExtensions) {
-		log.Debug("Ignore file extension flag ", path)
 		return true
 	}
 
 	if flags.FileType != "" && flags.FileType != ext {
-		log.Debugf("Ignoring file %s because it does not match file extension flag", path)
 		return true
 	}
 
 	if !flags.Hidden && strings.HasPrefix(filepath.Base(path), ".") {
-		log.Debug("Ignore file %s because he is hidden", path)
 		return true
 	}
 
