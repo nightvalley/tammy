@@ -17,11 +17,11 @@ You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t
 - by default hidden files are not taken into account by the program, but the `-h` flag will fix this.
 
 # Installation
-For install binary file from github release see: [Releases](https://github.com/PutaMadre1337/tammy/releases/latest)
+For install binary file from github release see: [Releases](https://github.com/nightvalley/tammy/releases/latest)
 
 ## Using Make
 ```sh
-git clone https://github.com/PutaMadre1337/tammy && cd tammy && make build
+git clone https://github.com/nightvalley/tammy && cd tammy && make build
 ```
 
 # Usage

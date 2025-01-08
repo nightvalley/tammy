@@ -66,7 +66,7 @@ func main() {
 			os.Exit(1)
 		}
 		if updatesAvailable {
-			log.Info("New updates are available!\n Repo link: https://github.com/PutaMadre1337/tammy")
+			log.Info("New updates are available!\n Repo link: https://github.com/nightvalley/tammy")
 		} else {
 			log.Info("You are using the latest version.")
 		}
