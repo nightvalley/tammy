@@ -63,8 +63,13 @@ func TableOutput(expandedPath string, flags fileutils.Flags) {
 				return OddRowStyle
 			}
 		}).
-		Headers("File name", "Lines").
 		Rows(rows...)
+
+	if flags.ShowSize {
+		t.Headers("File name", "Lines", "Size")
+	} else {
+		t.Headers("File name", "Lines")
+	}
 
 	fmt.Println(t)
 }

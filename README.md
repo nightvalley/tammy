@@ -10,12 +10,6 @@ You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t
 # Installation
 For install binary file from github release see: [Releases](https://github.com/PutaMadre1337/tammy/releases/latest)
 
-## Sh script for linux
-Build binary and copy it to your /usr/bin (<u>using sudo</u>).
-```sh
-git clone https://github.com/PutaMadre1337/tammy && cd tammy && chmod +x installation.sh && ./installation.sh
-```
-
 ## Using Make
 ```sh
 git clone https://github.com/PutaMadre1337/tammy && cd tammy && make build
