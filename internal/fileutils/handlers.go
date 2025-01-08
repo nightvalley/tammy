@@ -81,6 +81,9 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 	if err != nil {
 		log.Error(err)
 	}
+	if files.TotalLines == 0 {
+		log.Fatalf("Directory '%s' does not contain any files in which lines can be counted.", path)
+	}
 }
 
 func (flags *Flags) ignoreFile(path string) bool {
