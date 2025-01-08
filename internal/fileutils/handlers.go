@@ -47,7 +47,7 @@ const (
 	Gigabyte = 1024 * Megabyte
 )
 
-func (files *Files) FoundAllFilesInDir(path string, flags Flags) {
+func (files *Files) ExploreDirectory(path string, flags Flags) {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return nil

@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
-	"tammy/internal/files"
+	"tammy/internal/fileutils"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/list"
 )
 
-func ListOutput(expandedPath string, flags files.Flags, enumerator string) {
-	files := files.Files{}
-	files.FoundAllFilesInDir(expandedPath, flags)
+func ListOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
+	files := fileutils.Files{}
+	files.ExploreDirectory(expandedPath, flags)
 
 	l := list.New().EnumeratorStyle(lipgloss.NewStyle().Foreground(firstColor).BorderForeground(firstColor))
 	for i, name := range files.Name {
@@ -40,7 +40,7 @@ func ListOutput(expandedPath string, flags files.Flags, enumerator string) {
 	fmt.Println(l)
 }
 
-func addFileInfoToList(l *list.List, name string, lines int, size files.FileSize, showSize bool) {
+func addFileInfoToList(l *list.List, name string, lines int, size fileutils.FileSize, showSize bool) {
 	if showSize {
 		nameAndLines := fmt.Sprintf("%s: %d lines, %.2f %s",
 			filepath.Base(name), lines,

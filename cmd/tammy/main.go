@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	help "tammy/internal"
-	"tammy/internal/files"
+	"tammy/internal/fileutils"
 	"tammy/internal/forms"
 	"time"
 
@@ -47,14 +47,15 @@ func main() {
 	}
 
 	var (
-		formFlag        = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
-		pathFlag        = flag.String("p", ".", "Path")
-		filetypeFlag    = flag.String("ft", "", "Count files with file type")
-		timeFlag        = flag.Bool("time", false, "Benchmark")
-		showHiddenFlag  = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
-		fileSizeFlag    = flag.Bool("s", allwaysDisplaySize, "Show size of files")
-		showHelpMessage = flag.Bool("help", false, "Show help message")
-		version         = flag.Bool("version", false, "Check version")
+		formFlag          = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
+		pathFlag          = flag.String("p", ".", "Path")
+		fileExtFlag       = flag.String("ft", "", "Count files with file type")
+		ignoreFileExtFlag = flag.String("i", "", "Ignore files with file type")
+		timeFlag          = flag.Bool("time", false, "Benchmark")
+		showHiddenFlag    = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
+		fileSizeFlag      = flag.Bool("s", allwaysDisplaySize, "Show size of files")
+		showHelpMessage   = flag.Bool("help", false, "Show help message")
+		version           = flag.Bool("version", false, "Check version")
 	)
 	flag.Parse()
 
@@ -90,18 +91,15 @@ func main() {
 		return
 	}
 
-	var fileType string
-	if filetypeFlag != nil && *filetypeFlag != "" && (*filetypeFlag)[0] != '.' {
-		fileType = fmt.Sprintf(".%s", *filetypeFlag)
-	} else if filetypeFlag != nil {
-		fileType = *filetypeFlag
-	}
+	fileType := formatFileType(fileExtFlag)
+	ignorefileExtFlag := formatFileType(ignoreFileExtFlag)
 
-	f := files.Files{}
-	flags := files.Flags{
-		Hidden:   *showHiddenFlag,
-		FileType: fileType,
-		ShowSize: *fileSizeFlag,
+	f := fileutils.Files{}
+	flags := fileutils.Flags{
+		Hidden:                *showHiddenFlag,
+		ShowSize:              *fileSizeFlag,
+		FileType:              fileType,
+		IgnoredFileExtensions: ignorefileExtFlag,
 	}
 
 	if !*timeFlag {
@@ -113,7 +111,7 @@ func main() {
 		case availableForms[3]:
 			forms.TreeOutput(expandedPath, flags, envars["treeEnumerator"])
 		case availableForms[2]:
-			f.FoundAllFilesInDir(expandedPath, flags)
+			f.ExploreDirectory(expandedPath, flags)
 			fmt.Println(f.TotalLines)
 		}
 	} else {
@@ -122,27 +120,31 @@ func main() {
 			t := time.Now()
 			forms.TableOutput(expandedPath, flags)
 			duration := time.Since(t)
+
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[1]:
 			t := time.Now()
 			forms.ListOutput(expandedPath, flags, envars["listEnumerator"])
 			duration := time.Since(t)
+
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[2]:
 			t := time.Now()
-			f.FoundAllFilesInDir(path, flags)
+			f.ExploreDirectory(path, flags)
 			fmt.Println(f.TotalLines)
 			duration := time.Since(t)
+
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[3]:
 			t := time.Now()
 			forms.TreeOutput(path, flags, envars["treeEnumerator"])
 			duration := time.Since(t)
+
 			fmt.Println()
-			log.Infof("Execution time: %v", duration)
+			log.Info("Execution time: %v", duration)
 		}
 	}
 }
@@ -169,4 +171,15 @@ func ExpandPath(path string) (string, error) {
 	}
 
 	return absPath, nil
+}
+
+// TODO: добавить разделение строк с помощью strings.Split для возврата среза с файловыми типами
+func formatFileType(flag *string) string {
+	if flag != nil && *flag != "" {
+		if (*flag)[0] != '.' {
+			return fmt.Sprintf(".%s", *flag)
+		}
+		return *flag
+	}
+	return ""
 }

@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
-	"tammy/internal/files"
+	"tammy/internal/fileutils"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/tree"
 )
 
-func TreeOutput(expandedPath string, flags files.Flags, enumerator string) {
-	files := files.Files{}
-	files.FoundAllFilesInDir(expandedPath, flags)
+func TreeOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
+	files := fileutils.Files{}
+	files.ExploreDirectory(expandedPath, flags)
 
 	t := tree.Root(expandedPath).
 		EnumeratorStyle(
