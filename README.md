@@ -32,6 +32,8 @@ tammy
   + Specify the path to the directory in which to count lines. It is not necessary to specify the path. The path can also be specified at the very end: `tammy -f list -s -h ~/Documents`.
 - `tammy -ft`:
   + Count lines only in files with a certain extension. Example: `tammy -ft md`, or `tammy -ft .md`.
+- `tammy -i`:
+  * Ignore files with file extension: Example: `tammy -i go`, or `tammy -i .go`
 - `tammy -t`:
   + Show execution time.
 - `tammy -help`:

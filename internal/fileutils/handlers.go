@@ -90,7 +90,7 @@ func (flags *Flags) ignoreFile(path string) bool {
 		".flac", ".mp4", ".avi", ".mkv", ".zip",
 		".rar", ".tar", ".exe", ".dll", ".bin",
 		".dat", ".ttf", ".otf", ".xls", ".xlsx",
-		".pdf", ".doc", ".docx",
+		".pdf", ".doc", ".docx", "zst",
 	}
 
 	ext := strings.ToLower(filepath.Ext(path))
