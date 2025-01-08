@@ -1,5 +1,14 @@
 ![GIF](assets/main.gif)
 
+<!--toc:start-->
+- [About](#about)
+- [Installation](#installation)
+  - [Using Make](#using-make)
+- [Usage](#usage)
+  - [Flags](#flags)
+- [Configuring](#configuring)
+<!--toc:end-->
+
 # About
 A small Cli-Utility that will calculate for you the number of lines in all files and directories starting from your current directory.
 You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t file) | wc -l)"'`, and it can work even faster, but my program has some svistoperdelki, for example:
@@ -49,14 +58,6 @@ The utility is configured using environment variables. Available variables:
     + `export DEFAULT_FORM="list"`
     + `export DEFAULT_FORM="tree"`
     + `export DEFAULT_FORM="total"`
-- `ALLWAYS_DISPLAY_SIZE`
-  + Available values:
-    + `export ALLWAYS_DISPLAY_SIZE="false"` - default
-    + `export ALLWAYS_DISPLAY_SIZE="true"`
-- `ALLWAYS_SHOW_HIDDEN_FILES`
-  + Available values:
-    + `export ALLWAYS_SHOW_HIDDEN_FILES="false"` - default
-    + `export ALLWAYS_SHOW_HIDDEN_FILES="true"`
 - `LIST_ENUMERATOR`
   + Available values:
     + `export LIST_ENUMERATOR="roman"` - default
@@ -70,4 +71,11 @@ The utility is configured using environment variables. Available variables:
     + `export TREE_ENUMERATOR="rounded"` - default
     + `export TREE_ENUMERATOR="default_enumerator"`
     + `export TREE_ENUMERATOR="default_indenter"`
-
+- `ALLWAYS_DISPLAY_SIZE`
+  + Available values:
+    + `export ALLWAYS_DISPLAY_SIZE="false"` - default
+    + `export ALLWAYS_DISPLAY_SIZE="true"`
+- `ALLWAYS_SHOW_HIDDEN_FILES`
+  + Available values:
+    + `export ALLWAYS_SHOW_HIDDEN_FILES="false"` - default
+    + `export ALLWAYS_SHOW_HIDDEN_FILES="true"`
