@@ -1,11 +1,13 @@
+# Maintainer: nightvalley totes.maps.2h@icloud.com
+
 pkgname='tammy'
-pkgver=1.0.0+6+g4ed6591
+pkgver='1.0.0'
 pkgrel=1
 pkgdesc='A small CLI utility that will calculate for you the number of lines in all files and directories starting from your current directory.'
 arch=('x86_64')
 url='https://github.com/nightvalley/tammy'
 license=('MIT')
-depends=('go' 'git')
+makedepends=('git' 'go')
 source=('git+https://github.com/nightvalley/tammy.git')
 sha256sums=('SKIP')
 
