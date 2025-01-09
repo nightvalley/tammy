@@ -144,3 +144,4 @@ end, {
   end,
 })
 ```
+![PNG](assets/tammy-in-neovim.png)
