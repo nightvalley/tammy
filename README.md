@@ -1,12 +1,7 @@
 ![GIF](assets/main.gif)
 
 <!--toc:start-->
-- [About](#about)
-- [Installation](#installation)
-  - [Using Make](#using-make)
-- [Usage](#usage)
-  - [Flags](#flags)
-- [Configuring](#configuring)
+• [About](#about) • [Installation](#installation) • [Using Make](#using-make) • [Usage](#usage) • [Flags](#flags) • [Configuring](#configuring)
 <!--toc:end-->
 
 # About
