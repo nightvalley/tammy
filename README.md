@@ -9,7 +9,7 @@
 - [Configuring](#configuring)
 <!--toc:end-->
 
-# Abo
+# About
 A small Cli-Utility that will calculate for you the number of lines in all files and directories starting from your current directory.
 You can use `alias countlines='pwd && echo "Total number of lines: $(cat $(fd -t file) | wc -l)"'`, and it can work even faster, but my program has some svistoperdelki, for example:
 - you can only count lines in files that match the desired extension.
@@ -42,7 +42,7 @@ tammy
 - `tammy -ft`:
   + Count lines only in files with a certain extension. Example: `tammy -ft md`, or `tammy -ft .md`.
 - `tammy -i`:
-  * Ignore files with file extension: Example: `tammy -i go`, or `tammy -i .go`
+  * Ignore files with file extension. Example: `tammy -i go`, or `tammy -i .go`
 - `tammy -t`:
   + Show execution time.
 - `tammy -help`:
