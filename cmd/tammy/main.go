@@ -16,6 +16,8 @@ import (
 )
 
 func main() {
+	t := time.Now()
+
 	availableForms := []string{"table", "list", "total", "tree"}
 
 	var allwaysShowHiddenFiles bool
@@ -91,15 +93,12 @@ func main() {
 		return
 	}
 
-	fileType := formatFileType(fileExtFlag)
-	ignorefileExtFlag := formatFileType(ignoreFileExtFlag)
-
 	f := fileutils.Files{}
 	flags := fileutils.Flags{
 		Hidden:                *showHiddenFlag,
 		ShowSize:              *fileSizeFlag,
-		FileType:              fileType,
-		IgnoredFileExtensions: ignorefileExtFlag,
+		FileType:              *fileExtFlag,
+		IgnoredFileExtensions: *ignoreFileExtFlag,
 	}
 
 	if !*timeFlag {
@@ -117,21 +116,18 @@ func main() {
 	} else {
 		switch *formFlag {
 		case availableForms[0]:
-			t := time.Now()
 			forms.TableOutput(expandedPath, flags)
 			duration := time.Since(t)
 
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[1]:
-			t := time.Now()
 			forms.ListOutput(expandedPath, flags, envars["listEnumerator"])
 			duration := time.Since(t)
 
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[2]:
-			t := time.Now()
 			f.ExploreDirectory(path, flags)
 			fmt.Println(f.TotalLines)
 			duration := time.Since(t)
@@ -139,7 +135,6 @@ func main() {
 			fmt.Println()
 			log.Infof("Execution time: %v", duration)
 		case availableForms[3]:
-			t := time.Now()
 			forms.TreeOutput(path, flags, envars["treeEnumerator"])
 			duration := time.Since(t)
 
@@ -171,15 +166,4 @@ func ExpandPath(path string) (string, error) {
 	}
 
 	return absPath, nil
-}
-
-// TODO: добавить разделение строк с помощью strings.Split для возврата среза с файловыми типами
-func formatFileType(flag *string) string {
-	if flag != nil && *flag != "" {
-		if (*flag)[0] != '.' {
-			return fmt.Sprintf(".%s", *flag)
-		}
-		return *flag
-	}
-	return ""
 }

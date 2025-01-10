@@ -2,6 +2,7 @@ package fileutils
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/fs"
 	"os"
@@ -36,8 +37,8 @@ type FileSize struct {
 type Flags struct {
 	ShowSize              bool
 	Hidden                bool
-	FileType              string
 	Form                  string
+	FileType              string
 	IgnoredFileExtensions string
 }
 
@@ -75,13 +76,15 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 	if err != nil {
 		log.Error(err)
 	}
+
 	if files.TotalLines == 0 {
-		log.Fatalf("Directory '%s' does not contain any files in which lines can be counted.", path)
+		log.Errorf("Directory '%s' does not contain any files in which lines can be counted.", path)
+		os.Exit(0)
 	}
 }
 
 func (flags *Flags) ignoreFile(path string) bool {
-	ignoredFileExtensions := []string{
+	ignoredFileExtensionsSlice := []string{
 		".png", ".jpg", ".jpeg", ".gif", ".ico",
 		".bmp", ".tiff", ".svg", ".mp3", ".wav",
 		".flac", ".mp4", ".avi", ".mkv", ".zip",
@@ -89,25 +92,36 @@ func (flags *Flags) ignoreFile(path string) bool {
 		".dat", ".ttf", ".otf", ".xls", ".xlsx",
 		".pdf", ".doc", ".docx", "zst",
 	}
-
 	ext := strings.ToLower(filepath.Ext(path))
+
+	ft := formatFileType(flags.FileType)
+	if len(ft) != 0 {
+		for _, ft := range ft {
+			if ft == ext {
+				return false
+			}
+		}
+		return true
+	}
+
+	ignoredFT := formatFileType(flags.IgnoredFileExtensions)
+	if len(ignoredFT) != 0 {
+		for _, ft := range ignoredFT {
+			if ft == ext {
+				return true
+			}
+		}
+		return false
+	}
 
 	if ext == "%" || ext == "" {
 		return true
 	}
 
-	for _, ignoredExt := range ignoredFileExtensions {
+	for _, ignoredExt := range ignoredFileExtensionsSlice {
 		if ext == ignoredExt {
 			return true
 		}
-	}
-
-	if flags.IgnoredFileExtensions != "" && ext == strings.ToLower(flags.IgnoredFileExtensions) {
-		return true
-	}
-
-	if flags.FileType != "" && flags.FileType != ext {
-		return true
 	}
 
 	if !flags.Hidden && strings.HasPrefix(filepath.Base(path), ".") {
@@ -115,6 +129,23 @@ func (flags *Flags) ignoreFile(path string) bool {
 	}
 
 	return false
+}
+
+func formatFileType(flag string) []string {
+	split := strings.Split(flag, ",")
+	var fileTypes []string
+
+	for _, fileType := range split {
+		fileType = strings.TrimSpace(fileType)
+
+		if fileType != "" && fileType[0] != '.' {
+			fileType = fmt.Sprintf(".%s", fileType)
+		}
+
+		fileTypes = append(fileTypes, fileType)
+	}
+
+	return fileTypes
 }
 
 func (files *Files) processFile(filepath string) (int, error) {
