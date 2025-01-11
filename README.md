@@ -18,7 +18,11 @@ and it can work even faster, but my program has some svistoperdelki, for example
 
 # Installation
 ## For Arch Linux
-You can install with `makepkg -si`. For now I don't plan to add tammy to aur referring to the following [recommendations](https://wiki.archlinux.org/title/AUR_submission_guidelines#Rules_of_submission).
+```sh
+git clone https://github.com/nightvalley/tammy
+cd tammy
+makepkg -si
+```
 
 ## For other distros
 - For install binary file from github release see: [Releases](https://github.com/nightvalley/tammy/releases/latest)
