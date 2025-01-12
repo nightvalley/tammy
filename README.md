@@ -136,7 +136,7 @@ vim.api.nvim_create_user_command("Tammy", function(args)
 end, {
   nargs = "*",
   complete = function()
-    return { "-f list", "-f tree", "-ft ", "-h" }
+    return { "-f list ", "-f tree ", "-ft ", "-ft go ", "-h ", "-i " }
   end,
 })
 ```
