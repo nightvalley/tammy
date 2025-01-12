@@ -17,12 +17,8 @@ and it can work even faster, but my program has some svistoperdelki, for example
 - by default hidden files are not taken into account by the program, but the `-h` flag will fix this.
 
 # Installation
-## For Arch Linux
-You can install with `makepkg -si`. For now I don't plan to add tammy to aur referring to the following [recommendations](https://wiki.archlinux.org/title/AUR_submission_guidelines#Rules_of_submission).
-
-## For other distros
 - For install binary file from github release see: [Releases](https://github.com/nightvalley/tammy/releases/latest)
-- Using make:
+- Using make (for Arch Linux also use make build):
 ```sh
 git clone https://github.com/nightvalley/tammy
 cd tammy
