@@ -17,16 +17,8 @@ and it can work even faster, but my program has some svistoperdelki, for example
 - by default hidden files are not taken into account by the program, but the `-h` flag will fix this.
 
 # Installation
-## For Arch Linux
-```sh
-git clone https://github.com/nightvalley/tammy
-cd tammy
-makepkg -si
-```
-
-## For other distros
 - For install binary file from github release see: [Releases](https://github.com/nightvalley/tammy/releases/latest)
-- Using make:
+- Using make (for Arch Linux also use make build):
 ```sh
 git clone https://github.com/nightvalley/tammy
 cd tammy
@@ -144,7 +136,7 @@ vim.api.nvim_create_user_command("Tammy", function(args)
 end, {
   nargs = "*",
   complete = function()
-    return { "-f list", "-f tree", "-ft ", "-h" }
+    return { "-f list ", "-f tree ", "-ft ", "-ft go ", "-h ", "-i " }
   end,
 })
 ```

@@ -168,7 +168,6 @@ func ExpandPath(path string) (string, error) {
 	return absPath, nil
 }
 
-// TODO: добавить разделение строк с помощью strings.Split для возврата среза с файловыми типами
 func formatFileType(flag *string) string {
 	if flag != nil && *flag != "" {
 		if (*flag)[0] != '.' {
