@@ -36,6 +36,7 @@ type FileSize struct {
 type Flags struct {
 	ShowSize              bool
 	Hidden                bool
+	Relative              bool
 	FileType              string
 	Form                  string
 	IgnoredFileExtensions string

@@ -51,6 +51,7 @@ func main() {
 	var (
 		formFlag          = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
 		pathFlag          = flag.String("p", ".", "Path")
+		relative          = flag.Bool("rel", false, "Use relative path to file name")
 		fileExtFlag       = flag.String("ft", "", "Count files with file type")
 		ignoreFileExtFlag = flag.String("i", "", "Ignore files with file type")
 		timeFlag          = flag.Bool("time", false, "Benchmark")
@@ -97,6 +98,7 @@ func main() {
 	flags := fileutils.Flags{
 		Hidden:                *showHiddenFlag,
 		ShowSize:              *fileSizeFlag,
+		Relative:              *relative,
 		FileType:              *fileExtFlag,
 		IgnoredFileExtensions: *ignoreFileExtFlag,
 	}

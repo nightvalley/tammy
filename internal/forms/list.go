@@ -2,7 +2,6 @@ package forms
 
 import (
 	"fmt"
-	"path/filepath"
 	"strings"
 	"tammy/internal/fileutils"
 
@@ -16,7 +15,7 @@ func ListOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 
 	l := list.New().EnumeratorStyle(lipgloss.NewStyle().Foreground(firstColor).BorderForeground(firstColor))
 	for i, name := range files.Name {
-		addFileInfoToList(l, name, files.Lines[i], files.Size[i], flags.ShowSize)
+		addFileInfoToList(l, name, files.Lines[i], files.Size[i], flags)
 	}
 	l.Item("Total lines: " + fmt.Sprintf("%d", files.TotalLines))
 
@@ -40,14 +39,14 @@ func ListOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 	fmt.Println(l)
 }
 
-func addFileInfoToList(l *list.List, name string, lines int, size fileutils.FileSize, showSize bool) {
-	if showSize {
+func addFileInfoToList(l *list.List, fName string, lines int, size fileutils.FileSize, flags fileutils.Flags) {
+	if flags.ShowSize {
 		nameAndLines := fmt.Sprintf("%s: %d lines, %.2f %s",
-			filepath.Base(name), lines,
+			cutPath(fName, flags.Relative), lines,
 			size.Size, size.Unit)
 		l.Item(nameAndLines)
 	} else {
-		nameAndLines := fmt.Sprintf("%s: %d lines", filepath.Base(name), lines)
+		nameAndLines := fmt.Sprintf("%s: %d lines", cutPath(fName, flags.Relative), lines)
 		l.Item(nameAndLines)
 	}
 }

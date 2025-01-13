@@ -2,14 +2,11 @@ package forms
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"strings"
 	"tammy/internal/fileutils"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/tree"
-	"github.com/charmbracelet/log"
 )
 
 func TreeOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
@@ -36,7 +33,7 @@ func TreeOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 
 	for i, fName := range files.Name {
 		t.Child(
-			cutPath(fName),
+			cutPath(fName, flags.Relative),
 			tree.New().Child(
 				fmt.Sprintf("Lines: %d", files.Lines[i]),
 			),
@@ -50,20 +47,4 @@ func TreeOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 
 	t.Child(fmt.Sprintf("Total lines: %d", files.TotalLines))
 	fmt.Println(t)
-}
-
-func cutPath(path string) string {
-	current, err := os.Getwd()
-	if err != nil {
-		log.Error(err)
-		return path
-	}
-
-	relative, err := filepath.Rel(current, path)
-	if err != nil {
-		log.Error(err)
-		return path
-	}
-
-	return relative
 }
