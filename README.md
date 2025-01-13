@@ -84,6 +84,11 @@ The utility is configured using environment variables. Available variables:
     + `export ALLWAYS_SHOW_HIDDEN_FILES="true"`
 
 # Adding tammy to your Neovim
+<details>
+<summary>Preview</summary>
+<img src="assets/tammy-in-neovim.png" alt="PNG" />
+</details>
+
 ```lua
 vim.api.nvim_create_user_command("Tammy", function(args)
   local buf = vim.api.nvim_create_buf(false, true)
@@ -142,4 +147,3 @@ end, {
   end,
 })
 ```
-![PNG](assets/tammy-in-neovim.png)
