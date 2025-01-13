@@ -38,10 +38,12 @@ func TreeOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 				fmt.Sprintf("Lines: %d", files.Lines[i]),
 			),
 		)
+
 		if flags.ShowSize {
-			tree.New().Child(
+			c := tree.New().Child(
 				fmt.Sprintf("Size: %.2f %s", files.Size[i].Size, files.Size[i].Unit),
 			)
+			t.Child(c)
 		}
 	}
 
