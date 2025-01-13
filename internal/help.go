@@ -22,6 +22,8 @@ tammy
   + Show file size.
 - tammy -p:
   + Specify the path to the directory in which to count lines. It is not necessary to specify the path. The path can also be specified at the very end: tammy -f list -s -h ~/Documents.
+- tammy -rel:
+  + Use relative path to file name. Works only with the list and tree output forms.
 - tammy -ft:
   + Count lines only in files with a certain extension. Example: tammy -ft md, or tammy -ft .md.
 - tammy -t:
