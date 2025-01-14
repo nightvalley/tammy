@@ -34,7 +34,7 @@ func main() {
 		envars["defaultForm"] = "table"
 	}
 	if envars["allwaysDisplaySize"] == "true" {
-		allwaysShowHiddenFiles = true
+		allwaysDisplaySize = true
 	} else {
 		allwaysDisplaySize = false
 	}
