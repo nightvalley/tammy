@@ -10,16 +10,13 @@ import (
 )
 
 func TreeOutput(files filehandlers.Files, path string, enumerator string, relative, showSize bool) {
-	// f := filehandlers.Files{}
-	// files := f.ExploreDirectory(path)
-
 	t := tree.Root(".").
 		EnumeratorStyle(
 			lipgloss.NewStyle().
-				Foreground(firstColor).
+				Foreground(borderColor).
 				Align(lipgloss.Center).
 				PaddingRight(1)).ItemStyle(
-		lipgloss.NewStyle().Foreground(secondColor))
+		lipgloss.NewStyle().Foreground(itemColor))
 
 	switch strings.ToLower(enumerator) {
 	case "default_enumerator":

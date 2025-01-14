@@ -10,14 +10,11 @@ import (
 )
 
 func ListOutput(files filehandlers.Files, path, enumerator string, relative, showSize bool) {
-	// f := filehandlers.Files{}
-	// files := f.ExploreDirectory(path)
-
 	l := list.New().EnumeratorStyle(
 		lipgloss.NewStyle().
-			Foreground(firstColor).
-			BorderForeground(firstColor)).ItemStyle(
-		lipgloss.NewStyle().Foreground(secondColor))
+			Foreground(borderColor).
+			BorderForeground(borderColor)).ItemStyle(
+		lipgloss.NewStyle().Foreground(itemColor))
 	for i, name := range files.Name {
 		addFileInfoToList(l, name, files.Lines[i], files.Size[i], relative, showSize)
 	}
