@@ -3,15 +3,14 @@ package forms
 import (
 	"fmt"
 	"os"
-	"tammy/internal/filehandlers"
+
+	"github.com/nightvalley/tammy/internal/filehandlers"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
 )
 
 func TableOutput(files filehandlers.Files, path string, relative, showSize bool) {
-	// files := filehandlers.Files{}
-
 	re := lipgloss.NewRenderer(os.Stdout)
 
 	fileNameLen := 0
@@ -21,11 +20,11 @@ func TableOutput(files filehandlers.Files, path string, relative, showSize bool)
 		}
 	}
 
-	HeaderStyle := re.NewStyle().Foreground(firstColor).Bold(true).Align(lipgloss.Center)
+	HeaderStyle := re.NewStyle().Foreground(borderColor).Bold(true).Align(lipgloss.Center)
 	CellStyle := re.NewStyle().Padding(0, 2)
-	OddRowStyle := CellStyle.Foreground(secondColor)
-	EvenRowStyle := CellStyle.Foreground(secondColor)
-	BorderStyle := lipgloss.NewStyle().Foreground(firstColor)
+	OddRowStyle := CellStyle.Foreground(itemColor)
+	EvenRowStyle := CellStyle.Foreground(itemColor)
+	BorderStyle := lipgloss.NewStyle().Foreground(borderColor)
 
 	var rows [][]string
 	if showSize {

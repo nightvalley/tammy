@@ -1,8 +1,9 @@
 package commandline_test
 
 import (
-	"tammy/internal/commandline"
 	"testing"
+
+	"github.com/nightvalley/tammy/internal/commandline"
 )
 
 func Test_expandPath(t *testing.T) {

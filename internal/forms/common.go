@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	firstColor  = lipgloss.ANSIColor(10)
-	secondColor = lipgloss.ANSIColor(15)
+	borderColor = lipgloss.ANSIColor(10)
+	itemColor   = lipgloss.ANSIColor(15)
 )
 
 func cutPath(path string, relative bool) string {
