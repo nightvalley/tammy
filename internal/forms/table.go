@@ -11,9 +11,8 @@ import (
 )
 
 const (
-	firstColor  = lipgloss.Color("5")
-	secondColor = lipgloss.Color("240")
-	thirdColor  = lipgloss.Color("250")
+	firstColor  = lipgloss.ANSIColor(10)
+	secondColor = lipgloss.ANSIColor(15)
 )
 
 func TableOutput(expandedPath string, flags fileutils.Flags) {
@@ -32,7 +31,7 @@ func TableOutput(expandedPath string, flags fileutils.Flags) {
 	HeaderStyle := re.NewStyle().Foreground(firstColor).Bold(true).Align(lipgloss.Center)
 	CellStyle := re.NewStyle().Padding(0, 2)
 	OddRowStyle := CellStyle.Foreground(secondColor)
-	EvenRowStyle := CellStyle.Foreground(thirdColor)
+	EvenRowStyle := CellStyle.Foreground(secondColor)
 	BorderStyle := lipgloss.NewStyle().Foreground(firstColor)
 
 	var rows [][]string

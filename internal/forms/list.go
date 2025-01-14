@@ -13,7 +13,11 @@ func ListOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 	files := fileutils.Files{}
 	files.ExploreDirectory(expandedPath, flags)
 
-	l := list.New().EnumeratorStyle(lipgloss.NewStyle().Foreground(firstColor).BorderForeground(firstColor))
+	l := list.New().EnumeratorStyle(
+		lipgloss.NewStyle().
+			Foreground(firstColor).
+			BorderForeground(firstColor)).ItemStyle(
+		lipgloss.NewStyle().Foreground(secondColor))
 	for i, name := range files.Name {
 		addFileInfoToList(l, name, files.Lines[i], files.Size[i], flags)
 	}

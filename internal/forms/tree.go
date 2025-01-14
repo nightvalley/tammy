@@ -17,8 +17,9 @@ func TreeOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 		EnumeratorStyle(
 			lipgloss.NewStyle().
 				Foreground(firstColor).
-				BorderForeground(firstColor).
-				Align(lipgloss.Center).PaddingRight(1))
+				Align(lipgloss.Center).
+				PaddingRight(1)).ItemStyle(
+		lipgloss.NewStyle().Foreground(secondColor))
 
 	switch strings.ToLower(enumerator) {
 	case "default_enumerator":
