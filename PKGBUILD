@@ -1,7 +1,7 @@
 # Maintainer: nightvalley totes.maps.2h@icloud.com
 
 pkgname='tammy'
-pkgver=1.1.0
+pkgver=1.1.1
 pkgrel=1
 pkgdesc='A small CLI utility that will calculate for you the number of lines in all files and directories starting from your current directory.'
 arch=('x86_64')

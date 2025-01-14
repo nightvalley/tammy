@@ -59,7 +59,11 @@ The utility is configured using environment variables. Available variables:
   + Available values:
     + export TREE_ENUMERATOR="rounded" - default
     + export TREE_ENUMERATOR="default_enumerator"
-    + export TREE_ENUMERATOR="default_indenter"`
+    + export TREE_ENUMERATOR="default_indenter"
+- RELATIVE_PATH
+  + Available values:
+    + export RELATIVE_PATH="false" - default
+    + export RELATIVE_PATH="true"`
 
 	r, _ := glamour.NewTermRenderer(
 		glamour.WithAutoStyle(),
