@@ -1,91 +1,128 @@
 package filehandlers_test
 
 import (
-	"fmt"
-	"sort"
+	"reflect"
 	"tammy/internal/filehandlers"
 	"testing"
 )
 
 func TestFiles_ExploreDirectory(t *testing.T) {
 	tests := []struct {
-		name     string
-		filetype string
-		path     string
-		want     []string
-		hidden   bool
+		name      string // описание теста
+		path      string
+		fileExt   string
+		ignoreExt string
+		hidden    bool
+		want      filehandlers.Files // ожидаемый результат
 	}{
 		{
 			name:   "without hidden files",
 			hidden: false,
 			path:   "/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles",
-			want: []string{
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/b.txt",
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/a.json",
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/sisya.pisya",
+			want: filehandlers.Files{
+				Name: []string{
+					"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/b.txt",
+					"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/a.json",
+					"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/sisya.pisya",
+				},
+				TotalLines: 10,             // Укажите ожидаемое количество строк
+				Lines:      []int{3, 4, 3}, // Укажите ожидаемое количество строк для каждого файла
+				Size: []filehandlers.FileSize{
+					{Size: 1.2, Unit: "KB"}, // Укажите ожидаемый размер для каждого файла
+					{Size: 2.5, Unit: "KB"},
+					{Size: 0.8, Unit: "KB"},
+				},
 			},
 		},
 		{
 			name:   "with hidden files",
 			hidden: true,
 			path:   "/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles",
-			want: []string{
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/b.txt",
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/a.json",
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/sisya.pisya",
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/.pipiska.pipiska",
+			want: filehandlers.Files{
+				Name: []string{
+					"/home/username/Development/Golang/Cli/tammy/internal/commandline/testfiles/testfiles/with-lines/b.txt",
+					"/home/username/Development/Golang/Cli/tammy/internal/commandline/testfiles/testfiles/with-lines/a.json",
+					"/home/username/Development/Golang/Cli/tammy/internal/commandline/testfiles/testfiles/with-lines/sisya.pisya",
+					"/home/username/Development/Golang/Cli/tammy/internal/commandline/testfiles/testfiles/with-lines/.pipiska.pipiska",
+				},
+				TotalLines: 12,                // Укажите ожидаемое количество строк
+				Lines:      []int{3, 4, 3, 2}, // Укажите ожидаемое количество строк для каждого файла
+				Size: []filehandlers.FileSize{
+					{Size: 1.2, Unit: "KB"},
+					{Size: 2.5, Unit: "KB"},
+					{Size: 0.8, Unit: "KB"},
+					{Size: 0.5, Unit: "KB"}, // Размер для скрытого файла
+				},
 			},
 		},
 		{
-			name:     "with file type",
-			hidden:   false,
-			filetype: ".json",
-			path:     "/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles",
-			want: []string{
-				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/a.json",
+			name:    "with file type",
+			hidden:  false,
+			fileExt: ".json",
+			path:    "/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles",
+			want: filehandlers.Files{
+				Name: []string{
+					"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/a.json",
+				},
+				TotalLines: 4,        // Укажите ожидаемое количество строк
+				Lines:      []int{4}, // Укажите ожидаемое количество строк для файла
+				Size: []filehandlers.FileSize{
+					{Size: 2.5, Unit: "KB"}, // Укажите ожидаемый размер
+				},
 			},
 		},
-		// {
-		// 	name:     "binary file",
-		// 	hidden:   false,
-		// 	filetype: "",
-		// 	path:     "/home/username/Development/Golang/Cli/tammy/bin",
-		// 	want: []string{
-		// 		"",
-		// 	},
-		// },
+		{
+			name:    "binary file",
+			hidden:  false,
+			fileExt: "",
+			path:    "/home/username/Development/Golang/Cli/tammy/bin",
+			want: filehandlers.Files{
+				Name:       []string{"/home/username/Development/Golang/Cli/tammy/bin/with-lines/sisya.pisya"},
+				TotalLines: 3,        // Укажите ожидаемое количество строк
+				Lines:      []int{3}, // Укажите ожидаемое количество строк для файла
+				Size: []filehandlers.FileSize{
+					{Size: 1.0, Unit: "KB"},
+				},
+			},
+		},
+		{
+			name:      "ignore specific file extension",
+			hidden:    false,
+			fileExt:   "",
+			ignoreExt: ".txt",
+			path:      "/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles",
+			want: filehandlers.Files{
+				Name: []string{
+					"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/a.json",
+					"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/sisya.pisya",
+				},
+				TotalLines: 7,
+				Lines:      []int{4, 3},
+				Size: []filehandlers.FileSize{
+					{Size: 2.5, Unit: "KB"},
+					{Size: 0.8, Unit: "KB"},
+				},
+			},
+		},
+		{
+			name:   "empty directory",
+			hidden: false,
+			path:   "/home/username/Development/Golang/Cli/tammy/cmd/tammy/emptydir",
+			want: filehandlers.Files{
+				Name:       []string{},
+				TotalLines: 0,
+				Lines:      []int{},
+				Size:       []filehandlers.FileSize{},
+			},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var f filehandlers.Files
-			flags := filehandlers.Flags{
-				Hidden:   tt.hidden,
-				FileType: tt.filetype,
-			}
-
-			f.ExploreDirectory(tt.path, flags)
-
-			sort.Strings(f.Name)
-			sort.Strings(tt.want)
-
-			if len(f.Name) != len(tt.want) {
-				t.Errorf("\nReturned: %v\n Want: %v", len(f.Name), len(tt.want))
-				for _, file := range f.Name {
-					fmt.Println("returned file: ", file)
-				}
-				fmt.Println("")
-				for _, file := range tt.want {
-					fmt.Println("want: ", file)
-				}
-				return
-			}
-
-			for i, name := range f.Name {
-				if name != tt.want[i] {
-					t.Errorf("\nReturned: %v\nWant: %v", f.Name, tt.want)
-					return
-				}
+			f := filehandlers.Files{}
+			got := f.ExploreDirectory(tt.path, tt.fileExt, tt.ignoreExt, tt.hidden)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExploreDirectory() = %v, want %v", got, tt.want)
 			}
 		})
 	}

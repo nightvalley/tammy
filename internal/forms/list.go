@@ -9,9 +9,9 @@ import (
 	"github.com/charmbracelet/lipgloss/list"
 )
 
-func ListOutput(expandedPath string, flags filehandlers.Flags, enumerator string) {
-	files := filehandlers.Files{}
-	files.ExploreDirectory(expandedPath, flags)
+func ListOutput(files filehandlers.Files, path, enumerator string, relative, showSize bool) {
+	// f := filehandlers.Files{}
+	// files := f.ExploreDirectory(path)
 
 	l := list.New().EnumeratorStyle(
 		lipgloss.NewStyle().
@@ -19,7 +19,7 @@ func ListOutput(expandedPath string, flags filehandlers.Flags, enumerator string
 			BorderForeground(firstColor)).ItemStyle(
 		lipgloss.NewStyle().Foreground(secondColor))
 	for i, name := range files.Name {
-		addFileInfoToList(l, name, files.Lines[i], files.Size[i], flags)
+		addFileInfoToList(l, name, files.Lines[i], files.Size[i], relative, showSize)
 	}
 	l.Item("Total lines: " + fmt.Sprintf("%d", files.TotalLines))
 
@@ -43,14 +43,14 @@ func ListOutput(expandedPath string, flags filehandlers.Flags, enumerator string
 	fmt.Println(l)
 }
 
-func addFileInfoToList(l *list.List, fName string, lines int, size filehandlers.FileSize, flags filehandlers.Flags) {
-	if flags.ShowSize {
+func addFileInfoToList(l *list.List, fName string, lines int, size filehandlers.FileSize, relative, showSize bool) {
+	if showSize {
 		nameAndLines := fmt.Sprintf("%s: %d lines, %.2f %s",
-			cutPath(fName, flags.Relative), lines,
+			cutPath(fName, relative), lines,
 			size.Size, size.Unit)
 		l.Item(nameAndLines)
 	} else {
-		nameAndLines := fmt.Sprintf("%s: %d lines", cutPath(fName, flags.Relative), lines)
+		nameAndLines := fmt.Sprintf("%s: %d lines", cutPath(fName, relative), lines)
 		l.Item(nameAndLines)
 	}
 }

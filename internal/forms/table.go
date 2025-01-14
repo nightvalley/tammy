@@ -9,16 +9,15 @@ import (
 	"github.com/charmbracelet/lipgloss/table"
 )
 
-func TableOutput(expandedPath string, flags filehandlers.Flags) {
-	files := filehandlers.Files{}
-	files.ExploreDirectory(expandedPath, flags)
+func TableOutput(files filehandlers.Files, path string, relative, showSize bool) {
+	// files := filehandlers.Files{}
 
 	re := lipgloss.NewRenderer(os.Stdout)
 
 	fileNameLen := 0
 	for _, name := range files.Name {
-		if len(cutPath(name, flags.Relative)) > fileNameLen {
-			fileNameLen = len(cutPath(name, flags.Relative)) + 10
+		if len(cutPath(name, relative)) > fileNameLen {
+			fileNameLen = len(cutPath(name, relative)) + 10
 		}
 	}
 
@@ -29,14 +28,14 @@ func TableOutput(expandedPath string, flags filehandlers.Flags) {
 	BorderStyle := lipgloss.NewStyle().Foreground(firstColor)
 
 	var rows [][]string
-	if flags.ShowSize {
+	if showSize {
 		for i, name := range files.Name {
 			size := files.Size[i]
-			rows = append(rows, createRow(cutPath(name, flags.Relative), files.Lines[i], fmt.Sprintf("%.2f %s", size.Size, size.Unit)))
+			rows = append(rows, createRow(cutPath(name, relative), files.Lines[i], fmt.Sprintf("%.2f %s", size.Size, size.Unit)))
 		}
 	} else {
 		for i, name := range files.Name {
-			rows = append(rows, createRow(cutPath(name, flags.Relative), files.Lines[i]))
+			rows = append(rows, createRow(cutPath(name, relative), files.Lines[i]))
 		}
 	}
 
@@ -58,7 +57,7 @@ func TableOutput(expandedPath string, flags filehandlers.Flags) {
 		}).
 		Rows(rows...)
 
-	if flags.ShowSize {
+	if showSize {
 		t.Headers("File name", "Lines", "Size")
 	} else {
 		t.Headers("File name", "Lines")

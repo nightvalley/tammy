@@ -1,7 +1,7 @@
-package main_test
+package commandline_test
 
 import (
-	main "tammy/cmd/tammy"
+	"tammy/internal/commandline"
 	"testing"
 )
 
@@ -21,7 +21,7 @@ func Test_expandPath(t *testing.T) {
 		{
 			name:    "current directory",
 			path:    ".",
-			want:    "/home/username/Development/Golang/Cli/tammy/cmd/tammy",
+			want:    "/home/username/Development/Golang/Cli/tammy/internal/commandline",
 			wantErr: false,
 		},
 		{
@@ -33,7 +33,7 @@ func Test_expandPath(t *testing.T) {
 		{
 			name:    "relative path",
 			path:    "testfiles",
-			want:    "/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles",
+			want:    "/home/username/Development/Golang/Cli/tammy/internal/commandline/testfiles",
 			wantErr: false,
 		},
 		{
@@ -46,7 +46,7 @@ func Test_expandPath(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, gotErr := main.ExpandPath(tt.path)
+			got, gotErr := commandline.ExpandPath(tt.path)
 			if (gotErr != nil) != tt.wantErr {
 				t.Errorf("\nReturned error = %v", gotErr)
 				return

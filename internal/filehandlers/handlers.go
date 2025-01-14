@@ -17,7 +17,7 @@ type FileStatistics interface {
 }
 
 type CollectFileStats interface {
-	ExploreDirectory(path string, flags Flags)
+	ExploreDirectory(path, fileExt, ignoreFileExt string) Files
 	processFile(filepath string) (int, error)
 }
 
@@ -33,16 +33,7 @@ type FileSize struct {
 	Unit string
 }
 
-type Flags struct {
-	ShowSize              bool
-	Hidden                bool
-	Relative              bool
-	FileType              string
-	Form                  string
-	IgnoredFileExtensions string
-}
-
-func (files *Files) ExploreDirectory(path string, flags Flags) {
+func (files *Files) ExploreDirectory(path, fileExt, ignoreExt string, hidden bool) Files {
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return nil
@@ -55,7 +46,7 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 			return nil
 		}
 
-		if flags.ignoreFile(path) {
+		if ignoreFile(fileExt, ignoreExt, path, hidden) {
 			return nil
 		}
 
@@ -76,66 +67,27 @@ func (files *Files) ExploreDirectory(path string, flags Flags) {
 	if err != nil {
 		log.Error(err)
 	}
-	if files.TotalLines == 0 {
-		log.Fatalf("Directory '%s' does not contain any files in which lines can be counted.", path)
-	}
+
+	return *files
 }
 
-func (flags *Flags) ignoreFile(path string) bool {
+func ignoreFile(fileExt, ignoreExt, path string, hidden bool) bool {
 	ignoredFileExtensions := []string{
-		".png",
-		".jpg",
-		".jpeg",
-		".gif",
-		".ico",
-		".bmp",
-		".tiff",
-		".svg",
-		".mp3",
-		".wav",
-		".flac",
-		".mp4",
-		".avi",
-		".mkv",
-		".zip",
-		".rar",
-		".tar",
-		".exe",
-		".dll",
-		".bin",
-		".dat",
-		".ttf",
-		".otf",
-		".xls",
-		".xlsx",
-		".pdf",
-		".doc",
-		".docx",
-		".zst",
-		".sug",
-		".add",
-		".spl",
-		".apk",
-		".dmg",
-		".iso",
-		".img",
-		".mobi",
-		".epub",
-		".ppt",
-		".pptx",
-		".psd",
-		".ai",
-		".indd",
-		".sketch",
-		".3gp",
-		".mov",
-		".wmv",
-		".flv",
+		".png", ".jpg", ".jpeg", ".gif",
+		".ico", ".bmp", ".tiff", ".svg",
+		".mp3", ".wav", ".flac", ".mp4",
+		".avi", ".mkv", ".zip", ".rar",
+		".tar", ".exe", ".dll", ".bin",
+		".dat", ".ttf", ".otf", ".xls",
+		".xlsx", ".pdf", ".doc", ".docx",
+		".zst", ".sug", ".add", ".spl",
+		".apk", ".dmg", ".iso", ".img",
+		".mobi", ".epub", ".ppt", ".pptx",
+		".psd", ".ai", ".indd", ".sketch",
+		".3gp", ".mov", ".wmv", ".flv",
 		".swf",
 	}
-
 	ext := strings.ToLower(filepath.Ext(path))
-
 	if ext == "%" || ext == "" {
 		return true
 	}
@@ -146,15 +98,15 @@ func (flags *Flags) ignoreFile(path string) bool {
 		}
 	}
 
-	if flags.IgnoredFileExtensions != "" && ext == strings.ToLower(flags.IgnoredFileExtensions) {
+	if ignoreExt != "" && ext == strings.ToLower(ignoreExt) {
 		return true
 	}
 
-	if flags.FileType != "" && flags.FileType != ext {
+	if fileExt != "" && fileExt != ext {
 		return true
 	}
 
-	if !flags.Hidden && strings.HasPrefix(filepath.Base(path), ".") {
+	if !hidden && strings.HasPrefix(filepath.Base(path), ".") {
 		return true
 	}
 

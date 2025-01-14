@@ -9,9 +9,9 @@ import (
 	"github.com/charmbracelet/lipgloss/tree"
 )
 
-func TreeOutput(expandedPath string, flags filehandlers.Flags, enumerator string) {
-	files := filehandlers.Files{}
-	files.ExploreDirectory(expandedPath, flags)
+func TreeOutput(files filehandlers.Files, path string, enumerator string, relative, showSize bool) {
+	// f := filehandlers.Files{}
+	// files := f.ExploreDirectory(path)
 
 	t := tree.Root(".").
 		EnumeratorStyle(
@@ -34,13 +34,13 @@ func TreeOutput(expandedPath string, flags filehandlers.Flags, enumerator string
 
 	for i, fName := range files.Name {
 		t.Child(
-			cutPath(fName, flags.Relative),
+			cutPath(fName, relative),
 			tree.New().Child(
 				fmt.Sprintf("Lines: %d", files.Lines[i]),
 			),
 		)
 
-		if flags.ShowSize {
+		if showSize {
 			c := tree.New().Child(
 				fmt.Sprintf("Size: %.2f %s", files.Size[i].Size, files.Size[i].Unit),
 			)
