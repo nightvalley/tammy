@@ -7,9 +7,11 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
-	help "tammy/internal"
-	"tammy/internal/filehandlers"
-	"tammy/internal/forms"
+
+	"github.com/nightvalley/tammy/internal/filehandlers"
+	"github.com/nightvalley/tammy/internal/forms"
+
+	help "github.com/nightvalley/tammy/internal"
 
 	"github.com/charmbracelet/log"
 )

@@ -2,8 +2,9 @@ package filehandlers_test
 
 import (
 	"reflect"
-	"tammy/internal/filehandlers"
 	"testing"
+
+	"github.com/nightvalley/tammy/internal/filehandlers"
 )
 
 func TestFiles_ExploreDirectory(t *testing.T) {

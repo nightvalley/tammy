@@ -3,7 +3,8 @@ package forms
 import (
 	"fmt"
 	"os"
-	"tammy/internal/filehandlers"
+
+	"github.com/nightvalley/tammy/internal/filehandlers"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"

@@ -1,4 +1,4 @@
-module tammy
+module github.com/nightvalley/tammy
 
 go 1.23.4
 

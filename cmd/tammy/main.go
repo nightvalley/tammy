@@ -1,6 +1,6 @@
 package main
 
-import "tammy/internal/commandline"
+import "github.com/nightvalley/tammy/internal/commandline"
 
 func main() {
 	// t := time.Now()
