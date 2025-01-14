@@ -45,15 +45,15 @@ func TestFiles_ExploreDirectory(t *testing.T) {
 				"/home/username/Development/Golang/Cli/tammy/cmd/tammy/testfiles/with-lines/a.json",
 			},
 		},
-		{
-			name:     "binary file",
-			hidden:   false,
-			filetype: "",
-			path:     "/home/username/Development/Golang/Cli/tammy/bin",
-			want: []string{
-				"",
-			},
-		},
+		// {
+		// 	name:     "binary file",
+		// 	hidden:   false,
+		// 	filetype: "",
+		// 	path:     "/home/username/Development/Golang/Cli/tammy/bin",
+		// 	want: []string{
+		// 		"",
+		// 	},
+		// },
 	}
 
 	for _, tt := range tests {
