@@ -3,6 +3,7 @@ package forms
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
@@ -27,7 +28,8 @@ func cutPath(path string, relative bool) string {
 			return path
 		}
 
-		return relative
+		clean := strings.ReplaceAll(relative, "../", "")
+		return clean
 	}
 
 	return filepath.Base(path)
