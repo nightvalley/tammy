@@ -22,24 +22,26 @@ func main() {
 
 	var allwaysShowHiddenFiles bool
 	var allwaysDisplaySize bool
+	var relativePath bool
 	envars := make(map[string]string)
 	envars["defaultForm"] = os.Getenv("DEFAULT_FORM")
 	envars["allwaysDisplaySize"] = os.Getenv("ALLWAYS_DISPLAY_SIZE")
 	envars["allwaysShowHiddenFiles"] = os.Getenv("ALLWAYS_SHOW_HIDDEN_FILES")
 	envars["listEnumerator"] = os.Getenv("LIST_ENUMERATOR")
 	envars["treeEnumerator"] = os.Getenv("TREE_ENUMERATOR")
+	envars["relativePath"] = os.Getenv("RELATIVE_PATH")
 	if envars["defaultForm"] == "" {
 		envars["defaultForm"] = "table"
 	}
-	if envars["allwaysDisplaySize"] == "" {
-		allwaysShowHiddenFiles = false
-	} else if envars["allwaysDisplaySize"] == "true" {
-		allwaysDisplaySize = true
-	}
-	if envars["allwaysShowHiddenFiles"] == "" {
-		allwaysShowHiddenFiles = false
-	} else if envars["allwaysShowHiddenFiles"] == "true" {
+	if envars["allwaysDisplaySize"] == "true" {
 		allwaysShowHiddenFiles = true
+	} else {
+		allwaysDisplaySize = false
+	}
+	if envars["allwaysShowHiddenFiles"] == "true" {
+		allwaysShowHiddenFiles = true
+	} else {
+		allwaysShowHiddenFiles = false
 	}
 	if envars["listEnumerator"] == "" {
 		envars["listEnumerator"] = "default_enumerator"
@@ -47,13 +49,18 @@ func main() {
 	if envars["treeEnumerator"] == "" {
 		envars["treeEnumerator"] = "default_enumerator"
 	}
+	if envars["relativePath"] == "true" {
+		relativePath = true
+	} else {
+		relativePath = false
+	}
 
 	var (
 		formFlag          = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
 		pathFlag          = flag.String("p", ".", "Path")
-		relative          = flag.Bool("rel", false, "Use relative path to file name")
 		fileExtFlag       = flag.String("ft", "", "Count files with file type")
 		ignoreFileExtFlag = flag.String("i", "", "Ignore files with file type")
+		relative          = flag.Bool("rel", relativePath, "Use relative path to file name")
 		timeFlag          = flag.Bool("time", false, "Benchmark")
 		showHiddenFlag    = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
 		fileSizeFlag      = flag.Bool("s", allwaysDisplaySize, "Show size of files")
