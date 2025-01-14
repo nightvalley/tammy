@@ -54,12 +54,12 @@ func (flags Flags) Launch() {
 	} else {
 		relativePath = false
 	}
-	// if envars["listEnumerator"] == "" {
-	// 	envars["listEnumerator"] = "default_enumerator"
-	// }
-	// if envars["treeEnumerator"] == "" {
-	// 	envars["treeEnumerator"] = "default_enumerator"
-	// }
+	if envars["listEnumerator"] == "" {
+		envars["listEnumerator"] = "default_enumerator"
+	}
+	if envars["treeEnumerator"] == "" {
+		envars["treeEnumerator"] = "rounded"
+	}
 
 	var (
 		formFlag          = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
