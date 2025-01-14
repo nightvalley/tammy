@@ -64,15 +64,15 @@ Set FontSize 20
 Set Width 1200
 Set Height 600
 
-Type "tammy cmd/testfiles/" Enter
+Type "tammy internal/commandline/testfiles/" Enter
 Sleep 500ms
-Type "tammy -f list cmd/testfiles/" Enter
+Type "tammy -f list internal/commandline/testfiles/" Enter
 Sleep 500ms
-Type "tammy -f tree cmd/testfiles/" Enter
+Type "tammy -f tree internal/commandline/testfiles/" Enter
 Sleep 500ms
-Type "tammy -f tree -ft json cmd/testfiles/" Enter
+Type "tammy -f tree -ft json internal/commandline/testfiles/" Enter
 Sleep 500ms
-Type "tammy -s -ft .txt cmd/testfiles/" Enter
+Type "tammy -s -ft .txt internal/commandline/testfiles/" Enter
 Sleep 500ms
 
 Sleep 5s
