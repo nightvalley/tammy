@@ -37,7 +37,7 @@ func (flags Flags) Launch() {
 	envars["relativePath"] = os.Getenv("RELATIVE_PATH")
 
 	if envars["defaultForm"] == "" {
-		envars["defaultForm"] = "table"
+		envars["defaultForm"] = "tree"
 	}
 	if envars["allwaysDisplaySize"] == "true" {
 		allwaysDisplaySize = true
