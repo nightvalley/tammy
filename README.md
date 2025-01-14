@@ -3,6 +3,21 @@
 # tammy
 ![GIF](assets/main.gif)
 
+<details>
+<summary>Tabular output</summary>
+<img src="assets/table.png" alt="PNG" />
+</details>
+
+<details>
+<summary>Tree output</summary>
+<img src="assets/tree.png" alt="PNG" />
+</details>
+
+<details>
+<summary>List output</summary>
+<img src="assets/list.png" alt="PNG" />
+</details>
+
 [About](#about) • [Installation](#installation) • [Usage](#usage) • [Configuring](#configuring) • [Using tammy in NeoVim](#adding-tammy-to-your-neovim)
 
 </div>
