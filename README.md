@@ -36,7 +36,7 @@ and it can work even faster, but my program has some svistoperdelki, for example
 - Using make (for Arch Linux also use make build):
 ```sh
 git clone https://github.com/nightvalley/tammy
-cd tammy
+cd tammy 
 make build
 ```
 
