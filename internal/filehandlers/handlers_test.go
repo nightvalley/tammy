@@ -1,9 +1,9 @@
-package fileutils_test
+package filehandlers_test
 
 import (
 	"fmt"
 	"sort"
-	"tammy/internal/fileutils"
+	"tammy/internal/filehandlers"
 	"testing"
 )
 
@@ -58,8 +58,8 @@ func TestFiles_ExploreDirectory(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var f fileutils.Files
-			flags := fileutils.Flags{
+			var f filehandlers.Files
+			flags := filehandlers.Flags{
 				Hidden:   tt.hidden,
 				FileType: tt.filetype,
 			}

@@ -3,14 +3,14 @@ package forms
 import (
 	"fmt"
 	"strings"
-	"tammy/internal/fileutils"
+	"tammy/internal/filehandlers"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/list"
 )
 
-func ListOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
-	files := fileutils.Files{}
+func ListOutput(expandedPath string, flags filehandlers.Flags, enumerator string) {
+	files := filehandlers.Files{}
 	files.ExploreDirectory(expandedPath, flags)
 
 	l := list.New().EnumeratorStyle(
@@ -43,7 +43,7 @@ func ListOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
 	fmt.Println(l)
 }
 
-func addFileInfoToList(l *list.List, fName string, lines int, size fileutils.FileSize, flags fileutils.Flags) {
+func addFileInfoToList(l *list.List, fName string, lines int, size filehandlers.FileSize, flags filehandlers.Flags) {
 	if flags.ShowSize {
 		nameAndLines := fmt.Sprintf("%s: %d lines, %.2f %s",
 			cutPath(fName, flags.Relative), lines,

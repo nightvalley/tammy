@@ -3,14 +3,14 @@ package forms
 import (
 	"fmt"
 	"strings"
-	"tammy/internal/fileutils"
+	"tammy/internal/filehandlers"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/tree"
 )
 
-func TreeOutput(expandedPath string, flags fileutils.Flags, enumerator string) {
-	files := fileutils.Files{}
+func TreeOutput(expandedPath string, flags filehandlers.Flags, enumerator string) {
+	files := filehandlers.Files{}
 	files.ExploreDirectory(expandedPath, flags)
 
 	t := tree.Root(".").

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"tammy/internal/fileutils"
+	"tammy/internal/filehandlers"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
@@ -15,8 +15,8 @@ const (
 	secondColor = lipgloss.ANSIColor(15)
 )
 
-func TableOutput(expandedPath string, flags fileutils.Flags) {
-	files := fileutils.Files{}
+func TableOutput(expandedPath string, flags filehandlers.Flags) {
+	files := filehandlers.Files{}
 	files.ExploreDirectory(expandedPath, flags)
 
 	re := lipgloss.NewRenderer(os.Stdout)

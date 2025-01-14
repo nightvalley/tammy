@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 	help "tammy/internal"
-	"tammy/internal/fileutils"
+	"tammy/internal/filehandlers"
 	"tammy/internal/forms"
 	"time"
 
@@ -104,8 +104,8 @@ func main() {
 	fileType := formatFileType(fileExtFlag)
 	ignoreFiles := formatFileType(ignoreFileExtFlag)
 
-	f := fileutils.Files{}
-	flags := fileutils.Flags{
+	f := filehandlers.Files{}
+	flags := filehandlers.Flags{
 		Hidden:                *showHiddenFlag,
 		ShowSize:              *fileSizeFlag,
 		Relative:              *relative,
