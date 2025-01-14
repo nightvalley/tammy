@@ -11,7 +11,7 @@ type Release struct {
 }
 
 func CheckForUpdates() (bool, error) {
-	currentVersion := "v1.0.2"
+	currentVersion := "v1.1.0"
 
 	repo := "nightvalley/tammy"
 	url := fmt.Sprintf("https://api.github.com/repos/%s/releases/latest", repo)
