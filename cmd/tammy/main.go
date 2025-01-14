@@ -101,13 +101,16 @@ func main() {
 		return
 	}
 
+	fileType := formatFileType(fileExtFlag)
+	ignoreFiles := formatFileType(ignoreFileExtFlag)
+
 	f := fileutils.Files{}
 	flags := fileutils.Flags{
 		Hidden:                *showHiddenFlag,
 		ShowSize:              *fileSizeFlag,
 		Relative:              *relative,
-		FileType:              *fileExtFlag,
-		IgnoredFileExtensions: *ignoreFileExtFlag,
+		FileType:              fileType,
+		IgnoredFileExtensions: ignoreFiles,
 	}
 
 	if !*timeFlag {
