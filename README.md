@@ -97,6 +97,10 @@ The utility is configured using environment variables. Available variables:
   + Available values:
     + `export ALLWAYS_SHOW_HIDDEN_FILES="false"` - default
     + `export ALLWAYS_SHOW_HIDDEN_FILES="true"`
+- `RELATIVE_PATH`
+  + Available values:
+    + `export RELATIVE_PATH="false"` - default
+    + `export RELATIVE_PATH="true"`
 
 # Adding tammy to your Neovim
 <details>
