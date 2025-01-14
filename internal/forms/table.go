@@ -3,7 +3,6 @@ package forms
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"tammy/internal/filehandlers"
 
 	"github.com/charmbracelet/lipgloss"
@@ -18,8 +17,8 @@ func TableOutput(expandedPath string, flags filehandlers.Flags) {
 
 	fileNameLen := 0
 	for _, name := range files.Name {
-		if len(filepath.Base(name)) > fileNameLen {
-			fileNameLen = len(filepath.Base(name)) + 10
+		if len(cutPath(name, flags.Relative)) > fileNameLen {
+			fileNameLen = len(cutPath(name, flags.Relative)) + 10
 		}
 	}
 
@@ -33,11 +32,11 @@ func TableOutput(expandedPath string, flags filehandlers.Flags) {
 	if flags.ShowSize {
 		for i, name := range files.Name {
 			size := files.Size[i]
-			rows = append(rows, createRow(filepath.Base(name), files.Lines[i], fmt.Sprintf("%.2f %s", size.Size, size.Unit)))
+			rows = append(rows, createRow(cutPath(name, flags.Relative), files.Lines[i], fmt.Sprintf("%.2f %s", size.Size, size.Unit)))
 		}
 	} else {
 		for i, name := range files.Name {
-			rows = append(rows, createRow(filepath.Base(name), files.Lines[i]))
+			rows = append(rows, createRow(cutPath(name, flags.Relative), files.Lines[i]))
 		}
 	}
 
