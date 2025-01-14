@@ -4,7 +4,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
+)
+
+const (
+	firstColor  = lipgloss.ANSIColor(10)
+	secondColor = lipgloss.ANSIColor(15)
 )
 
 func cutPath(path string, relative bool) string {

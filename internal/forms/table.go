@@ -10,11 +10,6 @@ import (
 	"github.com/charmbracelet/lipgloss/table"
 )
 
-const (
-	firstColor  = lipgloss.ANSIColor(10)
-	secondColor = lipgloss.ANSIColor(15)
-)
-
 func TableOutput(expandedPath string, flags filehandlers.Flags) {
 	files := filehandlers.Files{}
 	files.ExploreDirectory(expandedPath, flags)
