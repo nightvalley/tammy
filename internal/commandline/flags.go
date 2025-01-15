@@ -11,7 +11,7 @@ import (
 	"github.com/nightvalley/tammy/internal/filehandlers"
 	"github.com/nightvalley/tammy/internal/forms"
 
-	help "github.com/nightvalley/tammy/internal"
+	help "github.com/nightvalley/tammy/internal/help"
 
 	"github.com/charmbracelet/log"
 )

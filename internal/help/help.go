@@ -23,7 +23,7 @@ tammy
 - tammy -p:
   + Specify the path to the directory in which to count lines. It is not necessary to specify the path. The path can also be specified at the very end: tammy -f list -s -h ~/Documents.
 - tammy -r:
-  + Use relative path to file name. Works only with the list and tree output forms.
+  + Use relative path to file name. Be careful if you use this function in tabular output. If the file name is too long, the table will be broken.
 - tammy -ft:
   + Count lines only in files with a certain extension. Example: tammy -ft md, or tammy -ft .md.
 - tammy -t:
