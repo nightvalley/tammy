@@ -65,14 +65,14 @@ Set Width 1200
 Set Height 600
 
 Type "tammy internal/commandline/testfiles/" Enter
-Sleep 500ms
+Sleep 800ms
 Type "tammy -f list internal/commandline/testfiles/" Enter
-Sleep 500ms
+Sleep 800ms
 Type "tammy -f tree internal/commandline/testfiles/" Enter
-Sleep 500ms
+Sleep 800ms
 Type "tammy -f tree -ft json internal/commandline/testfiles/" Enter
-Sleep 500ms
+Sleep 800ms
 Type "tammy -s -ft .txt internal/commandline/testfiles/" Enter
-Sleep 500ms
+Sleep 800ms
 
 Sleep 5s
