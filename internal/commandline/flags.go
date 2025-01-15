@@ -84,6 +84,13 @@ func (flags Flags) Launch() {
 		}
 		if updatesAvailable {
 			log.Info("New updates are available!\n Repo link: https://github.com/nightvalley/tammy")
+			log.Info(`Install new version:
+
+git clone https://github.com/nightvalley/tammy
+cd tammy 
+make build
+cd .. && rm -rf tammy
+`)
 		} else {
 			log.Info("You are using the latest version.")
 		}
