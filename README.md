@@ -34,6 +34,9 @@ and it can work even faster, but my program has some svistoperdelki, for example
 # Installation
 - For install binary file from github release see: [Releases](https://github.com/nightvalley/tammy/releases/latest)
 - Using make (for Arch Linux also use make build):
+  * First, check if you have these dependencies on your system:
+    + go
+    + nerd-fonts
 ```sh
 git clone https://github.com/nightvalley/tammy
 cd tammy 
