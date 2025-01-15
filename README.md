@@ -1,7 +1,7 @@
 <div align="center">
 
 # tammy
-![GIF](assets/main.gif)
+![GIF](assets/tammy.gif)
 
 <details>
 <summary>Tabular output</summary>
