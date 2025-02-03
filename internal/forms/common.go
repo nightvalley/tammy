@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	borderColor = lipgloss.ANSIColor(135)
-	itemColor   = lipgloss.ANSIColor(165)
+	borderColor = lipgloss.ANSIColor(2)
+	itemColor   = lipgloss.ANSIColor(4)
 )
 
 var (
