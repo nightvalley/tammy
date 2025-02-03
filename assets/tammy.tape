@@ -62,6 +62,7 @@ Require tammy
 Set Shell "zsh"
 Set FontSize 20
 Set Width 1200
+Set FontFamily "CaskaydiaCove Nerd Font"
 Set Height 600
 
 Type "tammy internal/commandline/testfiles/" Enter
