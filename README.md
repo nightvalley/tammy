@@ -106,10 +106,7 @@ The utility is configured using environment variables. Available variables:
     + `export RELATIVE_PATH="true"`
 
 # Using tammy in NeoVim
-<details>
-<summary>Preview</summary>
-<img src="assets/tammy-in-neovim.png" alt="PNG" />
-</details>
+![PNG](assets/tammy-in-neovim.png)
 
 ```lua
 vim.api.nvim_create_user_command("Tammy", function(args)
