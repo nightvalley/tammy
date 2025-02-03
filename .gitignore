@@ -5,7 +5,6 @@ gitpush.sh
 tammy
 tammy-1.0.1-1-x86_64.pkg.tar.zst
 tammy-debug-1.0.1-1-x86_64.pkg.tar.zst
-internal/commandline/testfiles/empty/a.json
-internal
-internal
-internal
+internal/commandline/testfiles/*
+internal/commandline/flags_test.go
+internal/filehandlers/handlers_test.go
