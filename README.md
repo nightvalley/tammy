@@ -60,8 +60,8 @@ tammy
   + Specify the path to the directory in which to count lines. It is not necessary to specify the path. The path can also be specified at the very end: `tammy -f list -s -h ~/Documents`.
 - `tammy -r`:
   + Use relative path to file name. Be careful if you use this function in tabular output. If the file name is too long, the table will be broken.
-- `tammy -ft`:
-  + Count lines only in files with a certain extension. Example: `tammy -ft md`, or `tammy -ft .md`.
+- `tammy -e`:
+  + Count lines only in files with a certain extension. Example: `tammy -e md`, or `tammy -e .md`.
 - `tammy -i`:
   * Ignore files with file extension. Example: `tammy -i go`, or `tammy -i .go`
 - `tammy -t`:
@@ -165,7 +165,7 @@ vim.api.nvim_create_user_command("Tammy", function(args)
 end, {
   nargs = "*",
   complete = function()
-    return { "-f list ", "-f tree ", "-ft ", "-ft go ", "-h ", "-i " }
+    return { "-f list ", "-f table ", "-e ", "-e go ", "-h ", "-i " }
   end,
 })
 ```

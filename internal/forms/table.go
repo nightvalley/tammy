@@ -57,9 +57,9 @@ func TableOutput(files filehandlers.Files, path string, relative, showSize bool)
 		Rows(rows...)
 
 	if showSize {
-		t.Headers("󰢪 File name", " Lines", " Size")
+		t.Headers(fileIcon+"File name", lineIcon+"Lines", sizeIcon+"Size")
 	} else {
-		t.Headers("󰢪 File name", " Lines")
+		t.Headers(fileIcon+"File name", lineIcon+"Lines")
 	}
 
 	fmt.Println(t)

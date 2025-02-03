@@ -10,8 +10,15 @@ import (
 )
 
 const (
-	borderColor = lipgloss.ANSIColor(10)
-	itemColor   = lipgloss.ANSIColor(15)
+	borderColor = lipgloss.ANSIColor(135)
+	itemColor   = lipgloss.ANSIColor(165)
+)
+
+var (
+	lineIcon       = "󰉸 "
+	sizeIcon       = " "
+	fileIcon       = "󰢪 "
+	totalLinesIcon = " "
 )
 
 func cutPath(path string, relative bool) string {
@@ -33,4 +40,24 @@ func cutPath(path string, relative bool) string {
 	}
 
 	return filepath.Base(path)
+}
+
+func SetIcon(path string) string {
+	switch filepath.Ext(path) {
+	case ".go", ".mod", ".sum":
+		return " "
+	case ".rs":
+		return " "
+	case ".md":
+		return " "
+	}
+
+	switch filepath.Base(path) {
+	case "Dockerfile":
+		return " "
+	case "Makefile":
+		return " "
+	}
+
+	return fileIcon
 }

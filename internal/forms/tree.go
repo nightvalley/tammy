@@ -31,21 +31,21 @@ func TreeOutput(files filehandlers.Files, path string, enumerator string, relati
 	}
 
 	for i, fName := range files.Name {
-		t.Child("󰢪 "+
+		t.Child(SetIcon(fName)+
 			cutPath(fName, relative),
 			tree.New().Child(
-				fmt.Sprintf(" Lines: %d", files.Lines[i]),
+				fmt.Sprintf(lineIcon+"Lines: %d", files.Lines[i]),
 			),
 		)
 
 		if showSize {
 			c := tree.New().Child(
-				fmt.Sprintf(" Size: %.2f %s", files.Size[i].Size, files.Size[i].Unit),
+				fmt.Sprintf(sizeIcon+"Size: %.2f %s", files.Size[i].Size, files.Size[i].Unit),
 			)
 			t.Child(c)
 		}
 	}
 
-	t.Child(fmt.Sprintf(" Total lines: %d", files.TotalLines))
+	t.Child(fmt.Sprintf(totalLinesIcon+"Total lines: %d", files.TotalLines))
 	fmt.Println(t)
 }

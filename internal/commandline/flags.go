@@ -66,7 +66,7 @@ func (flags Flags) Launch() {
 	var (
 		formFlag          = flag.String("f", envars["defaultForm"], "Available forms: "+strings.Join(availableForms, ", "))
 		pathFlag          = flag.String("p", ".", "Path")
-		fileExtFlag       = flag.String("ft", "", "Count files with file type")
+		fileExtFlag       = flag.String("e", "", "Count files with file extension")
 		ignoreFileExtFlag = flag.String("i", "", "Ignore files with file type")
 		showHiddenFlag    = flag.Bool("h", allwaysShowHiddenFiles, "Show hidden files")
 		relativePathFlag  = flag.Bool("r", relativePath, "Show relative path")
